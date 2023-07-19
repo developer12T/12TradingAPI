@@ -91,11 +91,11 @@ const response = {
               value9: data2[i].marketplaceshippingstatus, value19: data2[i].shippingaddress,    value29: data2[i].paymentamount,        value39: data2[i].vatpercent,       value49: data2[i].totalproductamount, 
               value10: data2[i].marketplacepayment,       value20: data2[i].shippingphone,      value30: data2[i].description,          value40: data2[i].isCOD,            value50: data2[i].uniquenumber, 
             }
-            // const result = await sequelize.query(query, {
-            //   replacements,
-            //   type: sequelize.QueryTypes.INSERT
-            // });
-            // console.log(result)
+            const result = await sequelize.query(query, {
+              replacements,
+              type: sequelize.QueryTypes.INSERT
+            });
+            console.log(result)
 
         }
 
@@ -148,14 +148,14 @@ const response = {
         const detail = await OrderDetail.findAll({attributes:['sku','number'],where:{id:list.id}})
         for(const listofdetail of detail){
           // console.log(listofdetail.sku)
-          const ctstock = await Product.findAll({
+          const ctstock5 = await Product.findAll({
             attributes:['sku','stock'],
             where:{
               sku:listofdetail.sku
             }
           })
-          const stocknow = ctstock[0].stock
-          const itcode = ctstock[0].sku
+          for(const ctstock of ctstock5){
+            const itcode = ctstock.sku
           var itcodeOnly = itcode.split('_')[0];
         
           const response = await axios.post('http://192.168.2.97:8383/M3/getStock',{ itemcode:itcodeOnly }, {
@@ -186,14 +186,48 @@ const response = {
                   for(const restSku of restIns){
                    
                       if(itsku == restSku.unit){
+                       
+                        var itskulist = listofdetail.sku.split('_')[1] ; //pcs is not
+                        if(itskulist == restSku.unit){
+                          var cut_stock = (listofdetail.number * restSku.factor)
+                        }
+                        console.log(listofdetail.sku + " order stock :" + cut_stock)
                         const pcsUnit = (restSku.factor * fstock.stock)
-                        console.log(pcsUnit+itsku)
+                        console.log(fstock.sku + " stock now :" + pcsUnit)
+                        console.log(fstock.sku + " cut stock :" + (pcsUnit - cut_stock))
+                        console.log(fstock.sku + " stock pre update :" + (fstock.stock))
+                        console.log(fstock.sku + " stock update: " + Math.max(0, Math.floor((pcsUnit - cut_stock) / restSku.factor)));
+                        const qtysTOCK =  isNaN((pcsUnit - cut_stock) / restSku.factor) ? 0 : Math.max(0, Math.floor((pcsUnit - cut_stock) / restSku.factor));
+                        console.log(qtysTOCK)
+                        console.log("------------------------------------------")
+                       
+                        const updateStock = await Product.update({stock:qtysTOCK},{where:{sku:fstock.sku}})
+
+
+                         const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
+
                         // console.log(restSku.factor)
                         // console.log(fstock.stock)
-                        // console.log(listofdetail.number)
                        
-                      }else{
-
+                       
+                      }else if(itsku == 'PCS'){
+                          console.log('PCS')
+                          if(itskulist != 'PCS'){
+                            var cut_stock = (listofdetail.number * restSku.factor)
+                          }else{
+                            var cut_stock = listofdetail.number
+                          }
+                          console.log(listofdetail.sku + " order stock :" + cut_stock)
+                          const pcsUnit = (fstock.stock)
+                          console.log(fstock.sku + " stock now :" + pcsUnit)
+                          // console.log(fstock.sku + " cut stock :" + (pcsUnit - cut_stock))
+                          console.log(fstock.sku + " stock pre update :" + (fstock.stock))
+                          console.log(fstock.sku + " stock update: " + Math.max(0, Math.floor(pcsUnit - cut_stock)));
+                          const qtysTOCK =  Math.max(0, Math.floor(pcsUnit - cut_stock));
+                          console.log(qtysTOCK)
+                          console.log("------------------------------------------")
+                         const updateStock = await Product.update({stock:qtysTOCK},{where:{sku:fstock.sku}})
+                         const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
                       }
                   }
                  
@@ -202,6 +236,8 @@ const response = {
          
           // const updateStock = await Product.update({stock:stockIns},{where:{sku:listofdetail.sku}})
           // const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
+          }
+          
         }
       }
 
