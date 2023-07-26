@@ -15,8 +15,14 @@ const M3API = require('./M3API/index')
 //authen
 const loginToken = require('./authen/login')
 
+//manageUser
+const manageUser = require('./manageuser/index')
+
 //zort
 app.use('/zort',auth,zort)
+
+// manageUser
+app.use('/manageUser',manageUser)
 
 //M3API
 app.use('/M3API',auth,M3API)

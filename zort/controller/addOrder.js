@@ -1,6 +1,7 @@
 const express = require('express');
 const moment = require('moment');
 const { Op, where } = require('sequelize');
+const axios = require('axios')
 // const axios = require('axios'); 
 const addOrder = express.Router();
 
@@ -147,7 +148,7 @@ addOrder.put('/addOrder', async (req, res) => {
               const itcode = ctstock.sku
             var itcodeOnly = itcode.split('_')[0];
           
-            const response = await axios.post('http://192.168.2.97:8383/M3/getStock',{ itemcode:itcodeOnly }, {
+            const response = await axios.post('http://192.168.2.97:8383/M3API/StockManage/fakeStock/getStock',{ itemcode:itcodeOnly }, {
                     headers: {
                      Authorization:"bearer IT_12"
                     },

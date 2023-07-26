@@ -1,61 +1,52 @@
-require('dotenv').config();
-
-const express = require('express')
-const { Sequelize } = require('sequelize');
-const  jwt = require('jsonwebtoken')
-
+const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { User } = require('./model/users');
+// const os = require('os');
 const router = express.Router();
-const { User } = require('./model/users')
 
-router.post('/login', async (req,res) => {
-
+router.post('/login', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const {Sequelize} = require('sequelize')
+
+  async function checkPassword(inputPassword, hashedPassword) {
+    try {
+      return await bcrypt.compare(inputPassword, hashedPassword);
+    } catch (error) {
+      throw new Error('เกิดข้อผิดพลาดในการตรวจสอบรหัสผ่าน');
+    }
+  }
 
   try {
     const dataUser = await User.findOne({
       where: {
         username: username,
-        password: password,
       },
     });
-     
+
     if (!dataUser) {
-      res.json({ error: "Invalid username or password" });
-    } else {
-
-      var userName = dataUser.fullname
-
-      const token = jwt.sign(
-            { username: dataUser.username }, 
-              process.env.TOKEN_KEY, 
-            { expiresIn: '2h' });
-            res.json({token,userName})
-
+      return res.status(401).json({ error: "Invalid username or password" });
     }
-  
+
+    const hashedPasswordFromDB = dataUser.password;
+    const isPasswordCorrect = await checkPassword(password, hashedPasswordFromDB);
+    if (isPasswordCorrect) {
+      const token = jwt.sign(
+        { username: dataUser.username },
+        process.env.TOKEN_KEY,
+        { expiresIn: '2h' }
+      );
+      const timeStamp = await User.update({loginAt:Sequelize.literal('CURRENT_TIMESTAMP')},{where:{usercode:dataUser.usercode}})
+
+      return res.json({ token, fullname: dataUser.fullname });
+    } else {
+      return res.status(401).json({ error: 'wrong-password' });
+    }
   } catch (error) {
-      console.log(error)
-      res.json('Invalid req')
+    console.log(error);
+    return res.status(500).json({ error: 'Invalid req' });
   }
-})
+});
 
-router.post("/addUser", async (req,res) => {
-  try {
-    const addState = await User.create(req.body, {
-      where: {
-        id: {
-          [Sequelize.Op.ne]: req.body.id 
-        }
-      }
-    });
-
-    res.json(addState)
-
-  } catch (error) {
-      console.log(error)
-      res.json('Invalid req')
-  }
-})
-
-module.exports = router
+module.exports = router;
