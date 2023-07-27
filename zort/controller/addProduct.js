@@ -81,7 +81,6 @@ addProduct.put('/addProduct', async (req, res) => {
          data.res = currentDate ;
         //  fs.writeFileSync(filePath, JSON.stringify(data)+ os.EOL, { flag: 'a' });
 
-
         res.status(200).json({response,"is Product":count,"InsertProduct:":createdproduct});
         createdproduct = 0;
     } catch (error) {
