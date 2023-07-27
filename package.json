@@ -18,6 +18,7 @@
     "getmac": "^5.20.0",
     "jsonwebtoken": "^9.0.1",
     "mssql": "^9.1.1",
+    "node-cron": "^3.0.2",
     "route": "^0.2.5",
     "sequelize": "^6.32.1"
   },
