@@ -11,13 +11,12 @@ getStock.post("/getStock", async (req, res) => {
     const data = await Stock.findAll({
       attributes: { exclude: ["id"] },
     });
-
     for (const gdata of data) {
-      var sumCol = gdata.balance + gdata.allocated;
-      gdata.sumCol = sumCol;
+      gdata.sumCol = gdata.balance + gdata.allocated;
+      console.log(gdata)
     }
-
-    res.json(datgdataa);
+    res.json(data);
+    
   } catch (error) {
     console.error(error);
     res.json(error);
