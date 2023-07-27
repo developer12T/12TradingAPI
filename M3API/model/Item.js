@@ -2,7 +2,7 @@ const { connectM3,mssql,sequelize,DataTypes } = require('../config/dbconnect');
 
 const Item = sequelize.define('MITMAS', {
     MMCONO: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     MMITNO: {
@@ -15,6 +15,26 @@ const Item = sequelize.define('MITMAS', {
     }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
 
+  const ItemConvert = sequelize.define('MITAUN', {
+    MUCONO: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    MUITNO: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    MUALUN: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    MUCOFA: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+  }
+  },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
+
 module.exports = {
     Item,
+    ItemConvert,
 };
