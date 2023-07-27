@@ -77,9 +77,9 @@ addProduct.put('/addProduct', async (req, res) => {
 
          const filePath = `zort/temp_data/product/product.json`;
          console.log(filePath)
-         fs.mkdirSync('zort/temp_data/product', { recursive: true });
+        //  fs.mkdirSync('zort/temp_data/product', { recursive: true });
          data.res = currentDate ;
-         fs.writeFileSync(filePath, JSON.stringify(data)+ os.EOL, { flag: 'a' });
+        //  fs.writeFileSync(filePath, JSON.stringify(data)+ os.EOL, { flag: 'a' });
 
 
         res.status(200).json({response,"is Product":count,"InsertProduct:":createdproduct});
