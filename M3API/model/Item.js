@@ -1,4 +1,4 @@
-const { connectM3,mssql,sequelize,DataTypes } = require('../config/dbconnect');
+const { sequelize,DataTypes } = require('../config/dbconnect');
 
 const Item = sequelize.define('MITMAS', {
     MMCONO: {
