@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 getItem.post('/getItem', async(req,res)=>{
     try {
     const data = await Item.findAll({ 
-        attributes: ['MMITNO','MMFUDS']
+        attributes: { exclude: ['id'] }
     });
     res.json(data);
     } catch (error) {
@@ -18,7 +18,7 @@ getItem.post('/getItem', async(req,res)=>{
 getItem.post('/getItemConvert', async(req,res)=>{
     try {
     const data = await ItemConvert.findAll({ 
-        attributes: ['MUITNO','MUALUN']
+        attributes: { exclude: ['id'] }
     });
     res.json(data);
     } catch (error) {

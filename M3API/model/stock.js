@@ -26,7 +26,7 @@ const Stock = sequelize.define('MITLOC', {
         allowNull: false,
         field: 'MLBANO'
     },
-    onhand: {
+    balance: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: 'MLSTQT'
@@ -36,6 +36,15 @@ const Stock = sequelize.define('MITLOC', {
         allowNull: false,
         field: 'MLALQT'
     }
+    // available: {
+    //   type: DataTypes.STRING,
+    //   allowNull: true,
+    //   get() {
+    //     const MLSTQT = this.getDataValue('MLSTQT');
+    //     const MLALQT = this.getDataValue('MLALQT');
+    //     return MLSTQT + MLALQT;
+    //   }, 
+    // }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
 
   module.exports = {

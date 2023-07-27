@@ -5,6 +5,10 @@ const Item = sequelize.define('MITMAS', {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    MMSTAT: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     MMITNO: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -12,6 +16,14 @@ const Item = sequelize.define('MITMAS', {
     MMFUDS: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    MMITTY: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    MMCFI3: {
+      type: DataTypes.STRING,
+      allowNull: false,
     }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
 
