@@ -18,8 +18,10 @@ const sequelize = new Sequelize('M3FDBTST', 'sa', 'One2@@', {
     dialectOptions: {
         options: {
             enableArithAbort: false,
+            encrypt: false,
             cryptoCredentialsDetails: {
                 minVersion: 'TLSv1'
+                // minVersion: 'TLSv1_2'
             }
         }
     }
