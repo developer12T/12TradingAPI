@@ -1,9 +1,7 @@
 const express = require("express");
 const getStock = express.Router();
 const { Stock } = require("../model/stock");
-const { sequelize } = require("../config/dbconnect");
 const {Sequelize} = require('sequelize')
-const { Op } = require("sequelize");
 
 getStock.post("/getStock", async (req, res) => {
   try {
@@ -16,7 +14,6 @@ getStock.post("/getStock", async (req, res) => {
         ]
       }
     });
-
     res.json(data);
 
   } catch (error) {
