@@ -113,8 +113,8 @@ addOrder.put('/addOrder', async (req, res) => {
   
             item.shi_customerid = item.customerid ;
             const { shi_customerid,shippingname,shippingaddress,shippingphone,shippingemail,shippingpostcode,shippingprovince,shippingdistrict,shippingsubdistrict,shippingstreetAddress } = item ;
-            await ShippingAddress.create(item); 
-           await ShippingAddress.findOrCreate({ where: { shippingaddress: shippingaddress }, defaults: { ...item} }).then(([shippingaddress,created]) => {
+          // await ShippingAddress.create(item); 
+          await ShippingAddress.findOrCreate({ where: { shippingaddress: shippingaddress }, defaults: { ...item} }).then(([shippingaddress,created]) => {
               if (created) {
                 createdShipCount++;
               } else {}
@@ -150,7 +150,7 @@ addOrder.put('/addOrder', async (req, res) => {
           
             const response = await axios.post('http://192.168.2.97:8383/M3API/StockManage/fakeStock/getStock',{ itemcode:itcodeOnly }, {
                     headers: {
-                     Authorization:"bearer IT_12"
+                     "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRoYW5hdG5vbi5qYWkiLCJpYXQiOjE2OTA0MjQxMTQsImV4cCI6MTY5MDQzMTMxNH0.0RgY0hV2sa-0Mpx-PEVE81QvIbBfnSOnqw88cT9lrZo"
                     },
                   });
                     const restdata = response.data ;
