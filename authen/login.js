@@ -39,7 +39,7 @@ router.post('/login', async (req, res) => {
       );
       const timeStamp = await User.update({loginAt:Sequelize.literal('CURRENT_TIMESTAMP')},{where:{usercode:dataUser.usercode}})
 
-      return res.json({ token, fullname: dataUser.fullname });
+      return res.json({ token, fullname: dataUser.fullname, company:dataUser.company , department:dataUser.department });
     } else {
       return res.status(401).json({ error: 'wrong-password' });
     }

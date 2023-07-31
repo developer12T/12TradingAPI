@@ -3,6 +3,7 @@ const addUser = express.Router();
 const bcrypt = require('bcrypt');
 const { Sequelize } = require('sequelize');
 const { User } = require('../model/user')
+// const { RoleUserZort } = require('../model/roleuser')
 addUser.post('/addUser', async(req,res)=>{
 
   const saltRounds = 10; 

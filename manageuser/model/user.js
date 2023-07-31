@@ -47,6 +47,9 @@ const User = sequelize.define('data_user', {
 
 },{freezeTableName:true,timestamps:true,createdAt:true,updatedAt:true})
 
-// sequelize.sync({force:false,alter:false}) 
+
+
+
+sequelize.sync({force:false,alter:false}) 
 
 module.exports = { User };   

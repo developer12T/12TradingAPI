@@ -90,6 +90,5 @@ const  OrderDetail = sequelize.define('orderDetail', {
 
 // OrderDetail.belongsTo(Order);  
 // Order.hasOne(OrderDetail);  
-
 // sequelize.sync({force:false,alter:false})
 module.exports = { Order,OrderDetail };

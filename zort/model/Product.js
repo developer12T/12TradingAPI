@@ -1,6 +1,6 @@
 const { sequelize,DataTypes } = require('../config/database') ;
 
-const Product = sequelize.define('Product', {
+const Product = sequelize.define('product', {
     id:{type: DataTypes.INTEGER,allowNull: false,primaryKey: true,},
     producttype:{type: DataTypes.INTEGER,allowNull: true,},
     name:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
