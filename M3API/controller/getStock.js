@@ -1,6 +1,7 @@
 const express = require("express");
 const getStock = express.Router();
 const { Stock } = require("../model/stock");
+// const { Item } = require("../model/item");
 const {Sequelize} = require('sequelize')
 
 getStock.post("/getStock", async (req, res) => {
@@ -10,7 +11,7 @@ getStock.post("/getStock", async (req, res) => {
       attributes: { 
         exclude: ["id"],
         include: [ 
-          [Sequelize.literal('MLSTQT - MLALQT'), 'available']
+          [Sequelize.literal('MLSTQT - MLALQT'), 'available'],
         ]
       }
     });

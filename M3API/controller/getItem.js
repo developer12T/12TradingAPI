@@ -1,31 +1,39 @@
-const express = require('express');
+const express = require("express");
 const getItem = express.Router();
-const { Item,ItemConvert } = require('../model/Item')
-const { Op } = require('sequelize');
+const { Item, ItemConvert } = require("../model/Item");
+const { Op } = require("sequelize");
 
-getItem.post('/getItem', async(req,res)=>{
-    try {
-    const data = await Item.findAll({ 
-        attributes: { exclude: ['id'] }
+getItem.post("/getItem", async (req, res) => {
+  try {
+    const data = await Item.findAll({
+      attributes: { exclude: ["id"] },
     });
     res.json(data);
-    } catch (error) {
-        console.error(error);
-        res.json(error);
-    }
+  } catch (error) {
+    console.error(error);
+    res.json(error);
+  }
 }),
-
-getItem.post('/getItemConvert', async(req,res)=>{
+  getItem.post("/getItemConvert", async (req, res) => {
     try {
-    const data = await ItemConvert.findAll({ 
-        attributes: { exclude: ['id'] }
-    });
-    res.json(data);
+      const data = await ItemConvert.findAll({
+        attributes: { exclude: ["id"] },
+        where: {
+            [Op.and]: [
+              { MUCONO: 410 },
+              { MUAUTP: 1 }
+            ]
+          }
+      });
+    //   const Convert = data.map((item) => ({
+    //     itemcode: item.itemcode,
+    //     type: [{ factor: item.factor, unit: item.unit }],
+    //   }));
+      res.json(data);
     } catch (error) {
-        console.error(error);
-        res.json(error);
+      console.error(error);
+      res.json(error);
     }
-})
+  });
 
-
-module.exports = getItem;  
+module.exports = getItem;
