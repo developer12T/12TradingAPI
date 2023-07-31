@@ -1,48 +1,63 @@
 const { sequelize,DataTypes } = require('../config/dbconnect');
 
 const Item = sequelize.define('MITMAS', {
-    MMCONO: {
+    companycode: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'MMCONO'
     },
-    MMSTAT: {
+    status: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'MMSTAT'
     },
-    MMITNO: {
+    itemcode: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'MMITNO'
     },
-    MMFUDS: {
+    itemname: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'MMFUDS'
     },
-    MMITTY: {
+    itemtype: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'MMITTY'
     },
-    MMCFI3: {
+    itemgroup: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'MMCFI3'
     }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
 
   const ItemConvert = sequelize.define('MITAUN', {
-    MUCONO: {
+    companycode: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'MUCONO'
     },
-    MUITNO: {
+    factype: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: 'MUAUTP'
+    },
+    itemcode: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'MUITNO'
     },
-    MUALUN: {
+    unit: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'MUALUN'
     },
-    MUCOFA: {
+    factor: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'MUCOFA'
   }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
 

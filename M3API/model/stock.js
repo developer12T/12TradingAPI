@@ -1,4 +1,5 @@
 const { sequelize,DataTypes } = require('../config/dbconnect');
+const { Item } = require('./Item');
 
 const Stock = sequelize.define('MITLOC', {
   companycode: {
@@ -36,16 +37,10 @@ const Stock = sequelize.define('MITLOC', {
         allowNull: false,
         field: 'MLALQT'
     }
-    // available: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    //   get() {
-    //     const MLSTQT = this.getDataValue('MLSTQT');
-    //     const MLALQT = this.getDataValue('MLALQT');
-    //     return MLSTQT + MLALQT;
-    //   }, 
-    // }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
+
+  // Item.hasMany(Stock);
+  // Stock.belongsTo(Item);
 
   module.exports = {
     Stock,

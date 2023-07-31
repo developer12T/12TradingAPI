@@ -2,11 +2,18 @@ const jwt = require('jsonwebtoken')
 
 const config = process.env
 const verifyToken = (req,res,next) =>{
-    const token = req.body.token || req.query.token || req.headers['x-access-token']
-    if (!token) {
-        return res.json('require token a')
+    const authHeader = req.headers['authorization'];
+    if(!authHeader){
+        var token = req.body.token || req.query.token || req.headers['x-access-token'] 
+    }else{
+        var token = authHeader && authHeader.split(' ')[1];
     }
-
+  
+   
+    if (!token) {
+        return res.json('require token')
+    }
+ 
     try {
         const decoded = jwt.verify(token, config.TOKEN_KEY)
         req.user = decoded
