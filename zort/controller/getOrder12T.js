@@ -18,19 +18,25 @@ getOrder.post('/getOrder', async (req, res) => {
                 res.json(data) 
             }
         }else if(page == 'all'){
-            const orders = [] ;
-            const data = await Order.findAll() ;
-            // const data2 = await Customer.findAll({attributes:['customername']},{where:{customerid:data.customerid}}) ;
-            // for(const cus of data){
-            //     const orders = await Customer.findAll({attributes:['customername']},{where:{customerid:cus.customerid}}) ;
-            //     console.log(orders)
-            // }
         
-    
+            const data = await Order.findAll() ;
             res.json(data) 
         }else if(page == 'inv'){
-            const data = await Order.findAll({where:{statusprintINV:'TaxInvoice'}}) ;
-            res.json(data) 
+            
+            if(tab == 'wait-tab'){
+
+                const data = await Order.findAll({where:{
+                    statusprintINV:'TaxInvoice',
+                    statusPrininvSuccess:'000'
+                }}) ;
+                res.json(data) 
+
+            }else if(tab == 'success-tab'){
+
+                const data = await Order.findAll({where:{statusprintINV:'TaxInvoice',statusPrininvSuccess:'002'}}) ;
+                res.json(data) 
+                
+            }
         }
    
     } catch (error) {
