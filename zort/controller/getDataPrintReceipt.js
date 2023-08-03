@@ -6,14 +6,17 @@ const { Customer } = require('../model/Customer')
 const sequelize = require('sequelize')
 
 getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
-
+      
     try {
-    
+        const idOrder = req.body.list
         const data = await Order.findAll({
           attributes: ['id', 'number', 'amount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount'],
           where: {
             statusprintINV: {
               [Op.ne]: 'TaxInvoice'
+            } ,
+            id: {
+              [Op.eq]: idOrder
             }
           },
           include: [
