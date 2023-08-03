@@ -64,9 +64,9 @@ addOrder.put('/addOrder', async (req, res) => {
               INSERT INTO [dbo].[order] (id,[ordertype],[number],[customerid],[warehousecode],[status],[paymentstatus],[marketplacename],[marketplaceshippingstatus],[marketplacepayment],[amount],[vatamount] ,[shippingvat],[shippingchannel],
               [shippingamount],[shippingdate],[shippingdateString],[shippingname],[shippingaddress] ,[shippingphone] ,[shippingemail],[shippingpostcode],[shippingprovince],[shippingdistrict] ,[shippingsubdistrict],[shippingstreetAddress],
               [orderdate],[orderdateString],[paymentamount],[description],[discount],[platformdiscount],[sellerdiscount],[shippingdiscount],[discountamount],[voucheramount],[vattype],[saleschannel],[vatpercent],[isCOD],[createdatetime],
-              [createdatetimeString],[updatedatetime],[updatedatetimeString],[expiredate],[expiredateString],[receivedate],[receivedateString],[totalproductamount],[uniquenumber],[properties],[isDeposit],[statusprint],[statusprintINV],[statusPrininvSuccess],[cono]) 
+              [createdatetimeString],[updatedatetime],[updatedatetimeString],[expiredate],[expiredateString],[receivedate],[receivedateString],[totalproductamount],[uniquenumber],[properties],[isDeposit],[statusprint],[statusprintINV],[statusPrininvSuccess],[cono],[invno]) 
               VALUES (:value1,:value2,:value3,:value4,:value5,:value6,:value7,:value8,:value9,:value10,:value11,:value12,:value13,:value14,:value15,:value16,:value17,:value18,:value19,:value20,:value21,:value22,:value23,:value24,:value25,
-              :value26,:value27,:value28,:value29,:value30,:value31,:value32,:value33,:value34,:value35,:value36,:value37,:value38,:value39,:value40,:value41,:value42,:value43,:value44,:value45,:value46,:value47,:value48,:value49,:value50,:value51,:value52,:value53,:value54,:value55,:value56)
+              :value26,:value27,:value28,:value29,:value30,:value31,:value32,:value33,:value34,:value35,:value36,:value37,:value38,:value39,:value40,:value41,:value42,:value43,:value44,:value45,:value46,:value47,:value48,:value49,:value50,:value51,:value52,:value53,:value54,:value55,:value56,:value57)
       
               IF NOT EXISTS (SELECT 1 FROM [dbo].[orderMovement] WHERE id = :value1)
                 BEGIN
@@ -82,7 +82,7 @@ addOrder.put('/addOrder', async (req, res) => {
                 value4: data2[i].customerid,                value14: data2[i].shippingchannel,    value24: data2[i].shippingdistrict,     value34: data2[i].shippingdiscount, value44: data2[i].updatedatetimeString, value54:'',
                 value5: data2[i].warehousecode,             value15: data2[i].shippingamount,     value25: data2[i].shippingsubdistrict,  value35: data2[i].discountamount,   value45: data2[i].expiredate,           value55:'000',
                 value6: data2[i].status,                    value16: data2[i].shippingdate,       value26: data2[i].shippingstreetAddress,value36: data2[i].voucheramount,    value46: data2[i].expiredateString,     value56:1,
-                value7: data2[i].paymentstatus,             value17: data2[i].shippingdateString, value27: data2[i].orderdate,            value37: data2[i].vattype,          value47: data2[i].receivedate, 
+                value7: data2[i].paymentstatus,             value17: data2[i].shippingdateString, value27: data2[i].orderdate,            value37: data2[i].vattype,          value47: data2[i].receivedate,          value57:1,
                 value8: data2[i].marketplacename,           value18: data2[i].shippingname,       value28: data2[i].orderdateString,      value38: data2[i].saleschannel,     value48: data2[i].receivedateString, 
                 value9: data2[i].marketplaceshippingstatus, value19: data2[i].shippingaddress,    value29: data2[i].paymentamount,        value39: data2[i].vatpercent,       value49: data2[i].totalproductamount, 
                 value10: data2[i].marketplacepayment,       value20: data2[i].shippingphone,      value30: data2[i].description,          value40: data2[i].isCOD,            value50: data2[i].uniquenumber, 
