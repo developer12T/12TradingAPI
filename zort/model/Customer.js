@@ -37,8 +37,6 @@ const ShippingAddress = sequelize.define('shippingAddress', {
     shippingstreetAddress:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
 },{freezeTableName:true,timestamps:true,createdAt:true,updatedAt:true})
 
-Customer.belongsTo(Order);   
-Order.hasOne(Customer);  
 Order.belongsTo(Customer, {
     foreignKey: 'customerid',
     targetKey: 'customerid', 

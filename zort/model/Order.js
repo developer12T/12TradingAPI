@@ -2,7 +2,8 @@ const { sequelize,DataTypes } = require('../config/database') ;
  
 const Order = sequelize.define('order', {
   id: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,},
-  cono: { type: DataTypes.INTEGER,allowNull: true,primaryKey: true,},
+  cono: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,},
+  invno: { type: DataTypes.INTEGER,allowNull: true,}, 
   ordertype: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   number: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   customerid: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
@@ -60,7 +61,7 @@ const Order = sequelize.define('order', {
   isDeposit:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,},
   statusprint:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,},
   statusprintinv:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,},
-  statusPrininvSuccess:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,}
+  statusPrininvSuccess:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,} 
 },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false});
 
 const  OrderDetail = sequelize.define('orderDetail', {
@@ -92,5 +93,5 @@ const  OrderDetail = sequelize.define('orderDetail', {
 // OrderDetail.belongsTo(Order);  
 // Order.hasOne(OrderDetail);  
 
-// sequelize.sync({force:false,alter:false})
+// sequelize.sync({force:false,alter:false}) 
 module.exports = { Order,OrderDetail };
