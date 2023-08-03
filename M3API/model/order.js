@@ -94,11 +94,6 @@ const COHead = sequelize.define('OOHEAD', {
         allowNull: false,
         field: 'OASMCD'
     },
-    salecode: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'OASMCD'
-    },
     orderref: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -132,7 +127,7 @@ const COHead = sequelize.define('OOHEAD', {
     customerordno: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'OANTLA'
+        field: 'OACUOR'
     }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
 
