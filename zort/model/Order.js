@@ -1,5 +1,5 @@
 const { sequelize,DataTypes } = require('../config/database') ;
-
+ 
 const Order = sequelize.define('order', {
   id: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,},
   cono: { type: DataTypes.INTEGER,allowNull: true,primaryKey: true,},

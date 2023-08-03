@@ -1,5 +1,5 @@
 const { sequelize,DataTypes } = require('../config/database') ;
-
+const { Order } = require('./Order')
 const Customer = sequelize.define('customer', {
     autoCusId:{ type: DataTypes.INTEGER,allowNull: false,primaryKey: true,autoIncrement: true},
     customerid: { type: DataTypes.INTEGER,allowNull: true},
@@ -37,8 +37,13 @@ const ShippingAddress = sequelize.define('shippingAddress', {
     shippingstreetAddress:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
 },{freezeTableName:true,timestamps:true,createdAt:true,updatedAt:true})
 
-// OrderDetail.belongsTo(Order);   
-// Order.hasOne(OrderDetail);  
+Customer.belongsTo(Order);   
+Order.hasOne(Customer);  
+Order.belongsTo(Customer, {
+    foreignKey: 'customerid',
+    targetKey: 'customerid', 
+  });
 
 // sequelize.sync({force:false,alter:false})  
+
 module.exports = { Customer,ShippingAddress };
