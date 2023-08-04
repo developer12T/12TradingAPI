@@ -13,7 +13,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
           attributes: ['id', 'number', 'amount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount'],
           where: {
             statusprintINV: {
-              [Op.ne]: 'TaxInvoice' 
+              [Op.ne]: 'TaxInvoice' ฟฟ
             } ,
             id: {
               [Op.eq]: idOrder
