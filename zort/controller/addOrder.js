@@ -116,17 +116,18 @@ addOrder.put('/addOrder', async (req, res) => {
                companycode:410,
                seriesname:'071' 
               },{});
-              
+
                var invser = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/getInvNumber',{ 
                 ordertype:'021'
               },{});
  
               var seNo = (numberser.data[0].lastno+i); 
-              var lastnumber = seNo ;
+               var lastnumber = seNo ;
 
               var inNo = (invser.data[0].customerordno+i); 
               var invnumber = inNo ;
-             const updateRun = await Order.update({invno:invnumber},{where:{id:orderDatup[i].id,statusprintINV:{[Op.ne]:'TaxInvoice'}}})
+             const updateinv = await Order.update({invno:invnumber},{where:{id:orderDatup[i].id,statusprintINV:{[Op.ne]:'TaxInvoice'}}})
+             const updateRun = await Order.update({cono:lastnumber},{where:{id:orderDatup[i].id}})
            }
            
           }
