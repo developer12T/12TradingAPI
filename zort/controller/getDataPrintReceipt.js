@@ -13,7 +13,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
           attributes: ['id', 'number', 'amount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount'],
           where: {
             statusprintINV: {
-              [Op.ne]: 'TaxInvoice' // ทดสอบ
+              [Op.ne]: 'TaxInvoice' 
             } ,
             id: {
               [Op.eq]: idOrder
@@ -25,6 +25,13 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
               required: true,
               attributes: ['customername', 'customeraddress'],
             },
+            {
+              model: OrderDetail,
+              required: true,
+              attributes: ['productid'],
+              separate: false,
+            },
+
           ],
         });  
 
