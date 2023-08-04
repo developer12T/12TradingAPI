@@ -26,6 +26,7 @@ const Customer = sequelize.define('customer', {
 const ShippingAddress = sequelize.define('shippingAddress', {
     autoAddId:{ type: DataTypes.INTEGER,allowNull: false,primaryKey: true,autoIncrement: true},
     shi_customerid: { type: DataTypes.INTEGER,allowNull: true},
+    order_id: { type: DataTypes.INTEGER,allowNull: true},
     shippingname:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
     shippingaddress:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
     shippingphone:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
@@ -40,6 +41,11 @@ const ShippingAddress = sequelize.define('shippingAddress', {
 Order.belongsTo(Customer, {
     foreignKey: 'customerid',
     targetKey: 'customerid', 
+  });
+
+  Order.belongsTo(ShippingAddress, {
+    foreignKey: 'id',
+    targetKey: 'order_id', 
   });
 
 // sequelize.sync({force:false,alter:false})  

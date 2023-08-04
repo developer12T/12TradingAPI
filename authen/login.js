@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/login', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  
   const {Sequelize} = require('sequelize')
 
   async function checkPassword(inputPassword, hashedPassword) {

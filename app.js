@@ -24,6 +24,7 @@ const M3API = require('./M3API/index')
 
 //authen
 const loginToken = require('./authen/login')
+const loginTokenAnt = require('./authen/loginAnt')
 const devLoginToken = require('./authen/devlogin')
 
 //manageUser
@@ -40,6 +41,7 @@ app.use('/M3API',M3API)
 
 //authen
 app.use('/12Trading',loginToken)
+app.use('/12Trading',loginTokenAnt) 
 app.use('/12Trading',devLoginToken)
 
 

@@ -2,7 +2,7 @@ const express = require('express');
 const getDataPrintReceipt = express.Router();
 const { Op } = require('sequelize');
 const { Order,OrderDetail } = require('../model/Order')
-const { Customer } = require('../model/Customer')
+const { Customer, ShippingAddress } = require('../model/Customer')
 const sequelize = require('sequelize')
 
 getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
@@ -10,22 +10,27 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
     try {
         const idOrder = req.body.list
         const data = await Order.findAll({
-          attributes: ['id', 'number', 'amount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount'],
+          attributes: ['id','cono','invno', 'number', 'amount','totalproductamount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount','saleschannel','statusprintinv'],
           where: {
             id:idOrder
           },
           include: [
             {
               model: Customer,
-              required: true,
+              required: false,
               attributes: ['customername', 'customeraddress','customeridnumber'],
             },
             {
               model: OrderDetail,
-              required: true,
+              required: false,
               attributes: ['productid','name','number','pricepernumber','totalprice'],
               separate: false,
             },
+            {
+              model: ShippingAddress,
+              required:false,
+              attributes:['shippingaddress']
+            }
           ],
         });  
 

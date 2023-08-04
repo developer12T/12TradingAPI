@@ -34,7 +34,7 @@ router.post('/devlogin', async (req, res) => {
     if (isPasswordCorrect) {
       const token = jwt.sign(
         { username: dataUser.username },
-        process.env.TOKEN_KEY_DEV,
+        process.env.TOKEN_KEY,
         { expiresIn: '16h' }
       );
       const timeStamp = await User.update({loginAt:Sequelize.literal('CURRENT_TIMESTAMP')},{where:{usercode:dataUser.usercode}})

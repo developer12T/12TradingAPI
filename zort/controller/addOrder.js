@@ -168,15 +168,16 @@ addOrder.put('/addOrder', async (req, res) => {
             });
   
             item.shi_customerid = item.customerid ;
+            item.order_id = item.id
             const { shi_customerid,shippingname,shippingaddress,shippingphone,shippingemail,shippingpostcode,shippingprovince,shippingdistrict,shippingsubdistrict,shippingstreetAddress } = item ;
             await ShippingAddress.create(item); 
-           await ShippingAddress.findOrCreate({ where: { shippingaddress: shippingaddress }, defaults: { ...item} }).then(([shippingaddress,created]) => {
+            await ShippingAddress.findOrCreate({ where: { shippingaddress: shippingaddress }, defaults: { ...item} }).then(([shippingaddress,created]) => {
               if (created) {
                 createdShipCount++;
               } else {}
             }); 
           }
-   
+
           for(let i=0;i<datalength;i++){
             if(data2[i].sellerdiscount > 0){
 
@@ -206,7 +207,7 @@ addOrder.put('/addOrder', async (req, res) => {
               orderDatadetail.id = data2[i].id ;
           
               await OrderDetail.bulkCreate([orderDatadetail])
-              await OrderDetail.update({procode:'FV2F'},{where:{totalprice:0}}) 
+              await OrderDetail.update({procode:'FV2F',pricepernumber:0,discount:0,discountamount:0},{where:{totalprice:0}}) 
             }
         }
   
@@ -268,8 +269,6 @@ addOrder.put('/addOrder', async (req, res) => {
                           console.log("------------------------------------------")
                          
                           const updateStock = await Product.update({stock:qtysTOCK},{where:{sku:fstock.sku}})
-  
-  
                            const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
   
                           // console.log(restSku.factor)
