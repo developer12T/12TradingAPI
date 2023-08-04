@@ -12,9 +12,9 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
         const data = await Order.findAll({
           attributes: ['id', 'number', 'amount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount'],
           where: {
-            // statusprintINV: {
-            //   [Op.ne]: 'TaxInvoice' // ทดสอบ
-            // } ,
+            statusprintINV: {
+              [Op.ne]: 'TaxInvoice' // ทดสอบ
+            } ,
             id: {
               [Op.eq]: idOrder
             }
@@ -25,12 +25,6 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
               required: true,
               attributes: ['customername', 'customeraddress','customeridnumber'],
             },
-            {
-              model: OrderDetail,
-              required: true,
-              attributes: ['productid','name','number','pricepernumber','totalprice'],
-              separate: false, 
-            }
           ],
         });  
 
