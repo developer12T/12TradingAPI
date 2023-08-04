@@ -82,7 +82,7 @@ addOrder.put('/addOrder', async (req, res) => {
                 value4: data2[i].customerid,                value14: data2[i].shippingchannel,    value24: data2[i].shippingdistrict,     value34: data2[i].shippingdiscount, value44: data2[i].updatedatetimeString, value54:'',
                 value5: data2[i].warehousecode,             value15: data2[i].shippingamount,     value25: data2[i].shippingsubdistrict,  value35: data2[i].discountamount,   value45: data2[i].expiredate,           value55:'000',
                 value6: data2[i].status,                    value16: data2[i].shippingdate,       value26: data2[i].shippingstreetAddress,value36: data2[i].voucheramount,    value46: data2[i].expiredateString,     value56:1,
-                value7: data2[i].paymentstatus,             value17: data2[i].shippingdateString, value27: data2[i].orderdate,            value37: data2[i].vattype,          value47: data2[i].receivedate,          value57:1,
+                value7: data2[i].paymentstatus,             value17: data2[i].shippingdateString, value27: data2[i].orderdate,            value37: data2[i].vattype,          value47: data2[i].receivedate,          value57:null,
                 value8: data2[i].marketplacename,           value18: data2[i].shippingname,       value28: data2[i].orderdateString,      value38: data2[i].saleschannel,     value48: data2[i].receivedateString, 
                 value9: data2[i].marketplaceshippingstatus, value19: data2[i].shippingaddress,    value29: data2[i].paymentamount,        value39: data2[i].vatpercent,       value49: data2[i].totalproductamount, 
                 value10: data2[i].marketplacepayment,       value20: data2[i].shippingphone,      value30: data2[i].description,          value40: data2[i].isCOD,            value50: data2[i].uniquenumber, 
@@ -110,24 +110,26 @@ addOrder.put('/addOrder', async (req, res) => {
 
             for(let i=0;i<orderDatup.length;i++){
 
-              var numberser = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/getNumberSeries',{ 
+              var numberser = await axios.post('http://192.168.2.97:8383/M3API/OrderManage/Order/getNumberSeries',{ 
+              // var numberser = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/getNumberSeries',{ 
                series:'ง',
                seriestype:'01', 
                companycode:410,
                seriesname:'071' 
               },{});
-
+              
                var invser = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/getInvNumber',{ 
                 ordertype:'021'
               },{});
  
-              var seNo = (numberser.data[0].lastno+i); 
-               var lastnumber = seNo ;
+              var seNo = (numberser.data[0].lastno+i);  
+              var lastnumber = seNo ;
 
-              var inNo = (invser.data[0].customerordno+i); 
+              var inNo = (parseInt(invser.data[0].customerordno) + i);
               var invnumber = inNo ;
-             const updateinv = await Order.update({invno:invnumber},{where:{id:orderDatup[i].id,statusprintINV:{[Op.ne]:'TaxInvoice'}}})
-             const updateRun = await Order.update({cono:lastnumber},{where:{id:orderDatup[i].id}})
+
+            //  const updateInv = await Order.update({invno:invnumber},{where:{id:orderDatup[i].id,statusprintINV:{[Op.eq]:'TaxInvoice'}}})
+             const updateRun = await Order.update({cono:lastnumber,invno:invnumber},{where:{id:orderDatup[i].id}})
            }
            
           }
@@ -193,18 +195,18 @@ addOrder.put('/addOrder', async (req, res) => {
                 name:itemDisOnline.data[0].itemname,
                 sku:itemDisOnline.data[0].itemcode,
                 number:1,
-                unittext:'PCS'
+                unittext:'PCS',
+                totalprice:data2[i].sellerdiscount
               })
             }
+            await OrderDetail.create({id:data2[i].id,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001',number:1,totalprice:data2[i].shippingamount,unittext:'PCS'})
             for(const list of data2[i].list){
               // console.log(data2[i].id) 
               const { auto_id, ...orderDatadetail } = list ; 
               orderDatadetail.id = data2[i].id ;
           
               await OrderDetail.bulkCreate([orderDatadetail])
-              await OrderDetail.update({procode:'FV2F'},{where:{totalprice:0}})
-              // await OrderDetail.bulkCreate([orderDatadetail])
-     
+              await OrderDetail.update({procode:'FV2F'},{where:{totalprice:0}}) 
             }
         }
   
