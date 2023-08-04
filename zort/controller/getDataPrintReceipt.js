@@ -25,6 +25,12 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
               required: true,
               attributes: ['customername', 'customeraddress'],
             },
+            {
+              model: OrderDetail,
+              required: true,
+              attributes: ['productid','name','number','pricepernumber','totalprice'],
+              separate: false, 
+            }
           ],
         });  
 
