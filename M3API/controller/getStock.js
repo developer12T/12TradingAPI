@@ -80,7 +80,7 @@ getStock.post('/getStockDetail', async (req, res) => {
          
         },
         where:{itemcode:itemcode,warehouse:warehouse},
-        group: ['MMFUDS']
+        
       });
     }
 
@@ -89,7 +89,8 @@ getStock.post('/getStockDetail', async (req, res) => {
 
       const itemsName = await Item.findAll({
         attributes:['itemname'],
-        where:{itemcode:data[i].itemcode}
+        where:{itemcode:data[i].itemcode},
+        group: ['MMFUDS']
       })
 
       itemsName.forEach((item) => {
