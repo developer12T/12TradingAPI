@@ -79,4 +79,48 @@ getItem.post("/getItemDisOnline", async (req, res) => {
     }
   }),
 
+  getItem.post("/getItemConvertItemcode", async (req, res) => {
+    const itcode = req.body.itcode
+    try {
+      const arrItem = [] ;
+
+      const data = await ItemConvert.findAll({
+        attributes: { exclude: ["id"] },
+        where: {
+            [Op.and]: [
+              { MUCONO: 410 },
+              { MUAUTP: 1 },
+              {itemcode:itcode}
+            ]
+          }
+      });
+    
+      for (let i = 0; i < data.length; i++) {
+        const trimmedData = data[i].itemcode.trim();
+        console.log(trimmedData);
+      
+        let existingObj = arrItem.find((item) => item.itemcode === trimmedData);
+      
+        if (!existingObj) {
+          existingObj = {
+            itemcode: trimmedData,
+            type: [],
+          };
+          arrItem.push(existingObj);
+        }
+      
+        existingObj.type.push({
+          factor: data[i].factor,
+          unit: data[i].unit,
+         
+        });
+      }
+      res.json(arrItem);
+      
+    } catch (error) {
+      console.error(error);
+      res.json(error);
+    }
+  });
+
 module.exports = getItem;
