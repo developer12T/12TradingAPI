@@ -1,5 +1,4 @@
 const { sequelize,DataTypes } = require('../config/dbconnect');
-const { Item } = require('./Item');
 
 const Stock = sequelize.define('MITLOC', {
   companycode: {

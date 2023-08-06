@@ -1,4 +1,5 @@
 const { sequelize,DataTypes } = require('../config/dbconnect');
+const { Stock } = require('./stock')
 
 const Item = sequelize.define('MITMAS', {
     companycode: {
@@ -60,6 +61,11 @@ const Item = sequelize.define('MITMAS', {
       field: 'MUCOFA'
   }
   },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey:false});
+
+  // Item.hasMany(Stock, {
+  //   foreignKey: 'MMITNO',
+  //   targetKey: 'itemcode', 
+  // });
 
 module.exports = {
     Item,

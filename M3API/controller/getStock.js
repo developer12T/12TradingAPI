@@ -1,18 +1,18 @@
-const express = require("express");
+const express = require('express');
 const getStock = express.Router();
-const { Stock } = require("../model/stock");
+const { Stock } = require('../model/stock');
 const { Item } = require('../model/Item');
 const {Sequelize, AsyncQueueError} = require('sequelize')
 
-getStock.post("/getStock", async (req, res) => {
+getStock.post('/getStock', async (req, res) => {
   try {
     const stocks = []
     const data = await Stock.findAll({
       attributes: { 
-        exclude: ["id"],
-        include: [ 
-          [Sequelize.literal('MLSTQT - MLALQT'), 'available'],
-        ]
+        exclude: ['id'],
+        // include: [ 
+        //   [Sequelize.literal('MLSTQT - MLALQT'), 'available'],
+        // ],
       }
     });
     for(let i =0 ;i <data.length;i++){
@@ -33,12 +33,23 @@ getStock.post("/getStock", async (req, res) => {
         lot:data[i].lot,
         balance:data[i].balance,
         allocated:data[i].allocated,
-        available:data[i].available
+        available:data[i].balance-data[i].allocated
       }
-      stocks.push(stock);
+     stocks.push(stock);
 
     }
     res.json(stocks);
+
+  } catch (error) {
+    console.error(error);
+    res.json(error);
+  }
+}),
+
+getStock.post('/getStockCount', async (req, res) => {
+  try {
+    const data = await Stock.count()
+    res.json([{"stockerp":data}]);
 
   } catch (error) {
     console.error(error);

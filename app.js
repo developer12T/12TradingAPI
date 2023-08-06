@@ -5,15 +5,6 @@ const app = express() ;
 const cors = require('cors')
 app.use(express.json())
 
-
-// app.use(cors())
-// const corsOptions = {
-//     origin: 'http://58.181.206.156:5858/', // กำหนดโดเมนของลูกค้าที่ยอมรับ cross-origin requests
-//     methods: ['GET', 'POST'], // กำหนดว่าเซิร์ฟเวอร์ยอมรับเฉพาะเมธอด GET และ POST
-//     allowedHeaders: ['Content-Type', 'Authorization'], // กำหนด Header ที่ยอมรับจากลูกค้า
-//     credentials: true, // ให้เอาข้อมูล authentication credentials ไปกับ cross-origin requests
-//   };
-  
   app.use(cors());
 
 //zort
@@ -44,5 +35,6 @@ app.use('/12Trading',loginToken)
 app.use('/12Trading',loginTokenAnt) 
 app.use('/12Trading',devLoginToken)
 
+// require('./cronjob/main');
 
 module.exports = app

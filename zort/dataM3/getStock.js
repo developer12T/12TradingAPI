@@ -1,7 +1,9 @@
 const axios = require('axios'); 
 const stock = async (req,res) => {
   try {
-    const response = await axios.get(process.env.m3apiurlgetstock, {});
+    const response = await axios.post(process.env.m3apiurlgetstock, {
+   
+    },{});
       
     return response.data;
   } catch (error) {

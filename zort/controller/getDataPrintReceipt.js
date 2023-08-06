@@ -33,7 +33,26 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
             }
           ],
         });  
+        const totalprint = await Order.findAll({attributes:['totalprint','statusprint','statusPrininvSuccess','statusprintinv'],where:{id:idOrder}})
+        var ci = totalprint[0].totalprint+1
+        if(totalprint[0].statusprint == '000'){
+          var st = '001'
+        }else if(totalprint[0].statusprint == '001'){
+          var st = '002'
+        }
 
+        if(totalprint[0].statusprintinv == 'TaxInvoice'){
+          if(totalprint[0].statusPrininvSuccess == '000'){
+            var st = '001'
+          }else if(totalprint[0].statusPrininvSuccess == '001'){
+            var st = '002'
+          }
+          await Order.update({statusPrininvSuccess:st,totalprint:ci},{where:{id:idOrder}})
+
+        }else{
+          await Order.update({statusprint:st,totalprint:ci},{where:{id:idOrder}})
+        }
+       
         res.json(data)      
     } catch (error) {
         console.log(error)

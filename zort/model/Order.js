@@ -60,9 +60,10 @@ const Order = sequelize.define('order', {
   properties:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,},
   isDeposit:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,},
   statusprint:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,},
+  totalprint:{type: DataTypes.INTEGER,collate: 'Thai_CI_AS',allowNull:true,},
   statusprintinv:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,},
   statusPrininvSuccess:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull:true,} 
-},{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false});
+},{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false}); 
 
 const  OrderDetail = sequelize.define('orderDetail', {
   auto_id: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,autoIncrement: true},
@@ -90,12 +91,11 @@ const  OrderDetail = sequelize.define('orderDetail', {
   integrationVariantId: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
 },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false,primaryKey: false})
 
-// OrderDetail.belongsTo(Order);  
-// Order.hasOne(OrderDetail);  
+
 Order.hasMany(OrderDetail, {
   foreignKey: 'id',
   targetKey: 'id', 
-});
+}); 
 
 // sequelize.sync({force:false,alter:false}) 
 module.exports = { Order,OrderDetail };
