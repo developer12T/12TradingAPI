@@ -82,7 +82,7 @@ addOrder.put('/addOrder', async (req, res) => {
                 value4: data2[i].customerid,                value14: data2[i].shippingchannel,    value24: data2[i].shippingdistrict,     value34: data2[i].shippingdiscount, value44: data2[i].updatedatetimeString, value54:'',
                 value5: data2[i].warehousecode,             value15: data2[i].shippingamount,     value25: data2[i].shippingsubdistrict,  value35: data2[i].discountamount,   value45: data2[i].expiredate,           value55:'000',
                 value6: data2[i].status,                    value16: data2[i].shippingdate,       value26: data2[i].shippingstreetAddress,value36: data2[i].voucheramount,    value46: data2[i].expiredateString,     value56:1,
-                value7: data2[i].paymentstatus,             value17: data2[i].shippingdateString, value27: data2[i].orderdate,            value37: data2[i].vattype,          value47: data2[i].receivedate,          value57:null,
+                value7: data2[i].paymentstatus,             value17: data2[i].shippingdateString, value27: data2[i].orderdate,            value37: data2[i].vattype,          value47: data2[i].receivedate,          value57:1,
                 value8: data2[i].marketplacename,           value18: data2[i].shippingname,       value28: data2[i].orderdateString,      value38: data2[i].saleschannel,     value48: data2[i].receivedateString, 
                 value9: data2[i].marketplaceshippingstatus, value19: data2[i].shippingaddress,    value29: data2[i].paymentamount,        value39: data2[i].vatpercent,       value49: data2[i].totalproductamount, 
                 value10: data2[i].marketplacepayment,       value20: data2[i].shippingphone,      value30: data2[i].description,          value40: data2[i].isCOD,            value50: data2[i].uniquenumber, 
@@ -93,6 +93,13 @@ addOrder.put('/addOrder', async (req, res) => {
               }); 
   
               if(data2[i].tag == null){
+                if(data2[i].saleschannel == 'Lazada'){
+                  const query3 = `UPDATE [dbo].[customer] SET [customercode]  = 'OLAZ000000' WHERE customerid = `+data2[i].customerid+``  ;
+                  const result3 = await sequelize.query(query3, {
+                    type: sequelize.QueryTypes.INSERT
+                  });
+
+                }
                 
               }else{
                 const query2 = `UPDATE [dbo].[order] SET [statusprintINV]  = 'TaxInvoice' WHERE id = `+data2[i].id+``  ;
@@ -101,7 +108,9 @@ addOrder.put('/addOrder', async (req, res) => {
                 });
               }
               // console.log(result)
+              
           }
+
 
           const orderDatup = await Order.findAll({where:{cono:1}})
           if(orderDatup == null){
@@ -119,14 +128,24 @@ addOrder.put('/addOrder', async (req, res) => {
               },{});
               
                var invser = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/getInvNumber',{ 
-                ordertype:'021'
+                ordertype:'071'
               },{});
  
+              var invm3 = parseInt(invser.data[0].customerordno)
+              const inv12T = await Order.findAll({attributes:['invno'],limit:1,order: [['invno', 'DESC']],})
+              console.log(inv12T[0].invno);
+              var inv12tcon = parseInt(inv12T[0].invno)
+              if(invm3 > inv12tcon){
+
+                var inNo = (parseInt(invser.data[0].customerordno) );
+                var invnumber = inNo ;
+              }else{
+                var inNo = (inv12tcon + 1);
+                var invnumber = inNo ;
+              }
               var seNo = (numberser.data[0].lastno+i);  
               var lastnumber = seNo ;
 
-              var inNo = (parseInt(invser.data[0].customerordno) + i);
-              var invnumber = inNo ;
 
             //  const updateInv = await Order.update({invno:invnumber},{where:{id:orderDatup[i].id,statusprintINV:{[Op.eq]:'TaxInvoice'}}})
              const updateRun = await Order.update({cono:lastnumber,invno:invnumber},{where:{id:orderDatup[i].id}})
@@ -144,6 +163,8 @@ addOrder.put('/addOrder', async (req, res) => {
               lastno:numberser.data[0].lastno+(countnew-constOld)
              }, {});
           }
+
+
         
           for (const item of data2) {
               createddate = currentDate;
@@ -164,6 +185,7 @@ addOrder.put('/addOrder', async (req, res) => {
                     updatedCount++;
                   } else {}
                 })
+
               } 
             });
   

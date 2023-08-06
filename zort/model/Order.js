@@ -3,7 +3,7 @@ const { sequelize,DataTypes } = require('../config/database') ;
 const Order = sequelize.define('order', {
   id: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,},
   cono: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,},
-  invno: { type: DataTypes.INTEGER,allowNull: true,}, 
+  invno: { type: DataTypes.STRING,allowNull: true,}, 
   ordertype: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   number: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   customerid: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},

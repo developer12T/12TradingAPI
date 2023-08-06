@@ -32,20 +32,22 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
     
         for (let i = 0; i < data.length; i++) {
             const itemData = await OrderDetail.findAll({
-                attributes: ['productid', 'sku', 'name', 'number', 'pricepernumber', 'totalprice'],
+                attributes: ['productid', 'sku', 'name', 'number', 'pricepernumber', 'totalprice','procode'],
                 where: {
                     id: data[i].id
                 }
             });
     
             const cusdata = await Customer.findAll({
-                attributes: ['customername'],
+                attributes: ['customername','customercode'],
                 where: {
                     customerid: data[i].customerid
                 }
             })
     
             const cuss = cusdata[0].customername;
+
+            const cuscode = cusdata[0].customercode
             // console.log(itemData);
     
             // console.log(cuss)
@@ -57,7 +59,8 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                 name: item.name,
                 number: item.number,
                 pricepernumber: item.pricepernumber,
-                totalprice: item.totalprice
+                totalprice: item.totalprice,
+                procode: item.procode
             }));
     
             const order = {
@@ -65,6 +68,8 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                 // saleschannel: data[i].saleschannel,
                 orderdate: data[i].orderdate,
                 orderdateString: data[i].orderdateString,
+                cono:data[i].cono,
+                inv:data[i].invno,
                 number: data[i].number,
                 customerid: data[i].customerid,
                 status: data[i].status,
@@ -83,6 +88,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                 totalprint:data[i].totalprint,
                 saleschannel: data[i].saleschannel,
                 customer: cuss,
+                customercode: cuscode,
                 item: items,
                 
             };
