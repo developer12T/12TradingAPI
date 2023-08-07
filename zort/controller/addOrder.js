@@ -10,7 +10,7 @@ const addOrder = express.Router();
 
 const orderDataZort = require('../dataZort/allOrder');
 
-const { Order, OrderDetail } = require('../model/Order') ;
+const { Order, OrderDetail,OrderHis } = require('../model/Order') ;
 const { Customer,ShippingAddress } = require('../model/Customer') ;
 const { orderMovement } = require('../model/Ordermovement') ;
 const { Product } = require('../model/Product')
@@ -28,12 +28,38 @@ const response = {
 
 
 addOrder.put('/addOrder', async (req, res) => {
-
+  const headers = {
+    storename: process.env.zortstorename,
+    apikey:  process.env.zortapikey,
+    apisecret:  process.env.zortapisecret,
+};
     try {
-        const data = await orderDataZort() ;
+          const datapre = await orderDataZort() ;
+          // const existingIds = (await OrderHis.findAll()).map(item => item.id);
+          // const newDataList = datapre.list.filter(item => !existingIds.includes(item.id));
+      
+          // for (const existingId of existingIds) {
+          //   const indexToRemove = newDataList.findIndex(item => item.id === existingId);
+          //   if (indexToRemove !== -1) {
+          //     newDataList.splice(indexToRemove, 1);
+          //   }
+          // }
+          const existingIds = (await OrderHis.findAll()).map(item => item.id);
+          const newDataList = datapre.list.filter(item => !existingIds.includes(item.id));
+          const filteredDataList = [];
+          for (const item of newDataList) {
+            if (item.status !== "Voided") {
+              filteredDataList.push(item);
+            }
+          }
+          
+          // const data2 = newDataList;
+     
         //  logger.info(JSON.stringify(data)) ;
         await OrderDetail.destroy({truncate: true});
-        const data2=data.list ;
+        // const data2=newDataList ;
+        const data2 = filteredDataList;
+
         const datalength=data2.length ;
        
         const { count } = await Order.findAndCountAll();
@@ -72,8 +98,7 @@ addOrder.put('/addOrder', async (req, res) => {
                 BEGIN
                     INSERT INTO [dbo].[orderMovement] (id, statusStock) VALUES (:value1, 0)
                 END
-              END 
-              `;
+              END`;
 
               const replacements = { 
                 value1: data2[i].id,                        value11: data2[i].amount,             value21: data2[i].shippingemail,        value31: data2[i].discount,         value41: data2[i].createdatetime,       value51: data2[i].properties,
@@ -108,7 +133,6 @@ addOrder.put('/addOrder', async (req, res) => {
                 });
               }
               // console.log(result)
-              
           }
 
 
@@ -138,7 +162,7 @@ addOrder.put('/addOrder', async (req, res) => {
               if(invm3 > inv12tcon){
 
                 var inNo = (parseInt(invser.data[0].customerordno) );
-                var invnumber = inNo ;
+                var invnumber = inNo+1 ;
               }else{
                 var inNo = (inv12tcon + 1);
                 var invnumber = inNo ;
@@ -148,6 +172,7 @@ addOrder.put('/addOrder', async (req, res) => {
 
 
             //  const updateInv = await Order.update({invno:invnumber},{where:{id:orderDatup[i].id,statusprintINV:{[Op.eq]:'TaxInvoice'}}})
+
              const updateRun = await Order.update({cono:lastnumber,invno:invnumber},{where:{id:orderDatup[i].id}})
            }
            
@@ -292,14 +317,29 @@ addOrder.put('/addOrder', async (req, res) => {
                          
                           const updateStock = await Product.update({stock:qtysTOCK},{where:{sku:fstock.sku}})
                            const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
+
   
                           // console.log(restSku.factor)
                           // console.log(fstock.stock)
+                          var stocks = [
+                            {
+                              "sku": fstock.sku,
+                              "stock": qtysTOCK,
+                            //   "cost": 999
+                            }
+                          ]
+
+                          const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
+                            headers: headers,
+                          });
+
+                          const responseStock =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductStockList?warehousecode=W0001', {stocks}, {
+                            headers: headers,
+                          });
                          
-                         
-                        }else if(itsku == 'PCS'){
+                        }else if((itsku == 'PCS')||(itsku == 'BOT')||(itsku == 'Free')){
                             console.log('PCS')
-                            if(itskulist != 'PCS'){
+                            if((itskulist != 'PCS')||(itskulist != 'BOT')||(itskulist != 'Free')){
                               var cut_stock = (listofdetail.number * restSku.factor)
                             }else{
                               var cut_stock = listofdetail.number
@@ -315,6 +355,23 @@ addOrder.put('/addOrder', async (req, res) => {
                             console.log("------------------------------------------")
                            const updateStock = await Product.update({stock:qtysTOCK},{where:{sku:fstock.sku}})
                            const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
+
+                           var stocks = [
+                            {
+                              "sku": fstock.sku,
+                              "stock": qtysTOCK,
+                            //   "cost": 999
+                            }
+                          ]
+
+                          const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
+                            headers: headers,
+                          });
+
+                          const responseStock =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductStockList?warehousecode=W0001', {stocks}, {
+                            headers: headers,
+                          });
+
                         }
                     }
                    
@@ -431,6 +488,7 @@ addOrder.put('/addOrder', async (req, res) => {
         updatedCount=0 ;
         createdCount=0;
         createdShipCount=0;
+        // res.json(data2)
       } catch (error) {
         console.log(error)
         res.status(500).json(error) 

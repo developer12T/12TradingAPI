@@ -32,8 +32,32 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
             for(let i =0;i<list.length;i++){
                 console.log(i);
                     const query = `
-                    INSERT INTO [dbo].[data_order] (orderdate,senddate,orderno,customerordno, ordertype,warehouse,facility,staticid,ourref,yourref,customercode,addressno,itemno,itemcode,
-                        unit,qty,price,discount,procode,salecode,responsible,channel,status,insert_at,update_at) 
+                    INSERT INTO [dbo].[data_order] (OAORDT,
+                        RLDT,
+                        ORNO,
+                        CUOR,
+                        OAORTP,
+                        WHLO,
+                        FACI,
+                        OAFRE1,
+                        OAOREF,
+                        OAYREF,
+                        CUNO,
+                        ADID,
+                        OBPONR,
+                        OBITNO,
+                        OBALUN,
+                        OBORQA,
+                        OBSAPR,
+                        OBDIA2,
+                        OBPIDE,
+                        OBSMCD,
+                        OARESP,
+                        CHANNEL,
+                        STATUS,
+                        INSERT_AT,
+                        UPDATE_AT
+                        ) 
                     VALUES (:value1,:value2,:value3,:value4,:value5,:value6,:value7,:value8,:value9,:value10,:value11,:value12,:value13,:value14,:value15,
                         :value16,:value17,:value18,:value19,:value20,:value21,:value22,:value23,:value24,:value25)
                     `;
@@ -64,7 +88,7 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
                         }
                     const replacements = { 
                         value1:orderdatenum,  value11: order.customercode,    value21: 'SA02',        
-                        value2:orderdatenum,  value12: '',                    value22: order.saleschannel,     
+                        value2:orderdatenum,  value12: '',                    value22: 'ONLINE',     
                         value3:order.cono,    value13: i+1,                   value23:0,     
                         value4: order.inv,    value14: list[i].sku,           value24: currentDate,     
                         value5:'071',         value15:unittext,               value25: currentDate,  

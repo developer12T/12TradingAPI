@@ -12,16 +12,16 @@ syncstructure.post('/sync', async (req, res) => {
 
     try {
 
-        if (username === useradmin && password === passadmin) {
-            sequelize.authenticate().then(async () => {
-                    await sequelize.sync({force:false,alter:false})  
-                }).catch(err => {
-                    console.error('Failed connect to the database:', err)
-                });
-            res.json('SyncDatabase : -- Complete')
-        } else {
-            res.json('SyncDatabase : -- Failed to sync don`t worry about me')
-        }
+        // if (username === useradmin && password === passadmin) {
+        //     sequelize.authenticate().then(async () => {
+        //             await sequelize.sync({force:false,alter:false})  
+        //         }).catch(err => {
+        //             console.error('Failed connect to the database:', err)
+        //         });
+        //     res.json('SyncDatabase : -- Complete')
+        // } else {
+        //     res.json('SyncDatabase : -- Failed to sync don`t worry about me')
+        // }
 
     } catch (error) {
             console.error('เกิดข้อผิดพลาด: ', error);

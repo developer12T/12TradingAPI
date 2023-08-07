@@ -24,13 +24,14 @@ updateStock.put('/updateAvailableStock', async (req, res) => {
         apisecret:  process.env.zortapisecret,
     };
     try {
-        const response = await axios.post(process.env.UpdateProductAvailableStockList, req.body, {
-          headers: headers,
-          params: params
-        });
-        res.status(200).json(response.data)
+      const response = await axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', req.body, {
+        headers: headers,
+        // params: warehousecode,
+      });
+      
+        res.json(response.data)
       } catch (error) {
-       res.status(500).json(error)
+       res.status(500).json(error) 
       }
 });  
 

@@ -9,6 +9,11 @@ updateStock12T.put('/updateStock12T', async (req, res) => {
     try {  
                 const data = await stock() ;
                 const itemcodeToAvailableBalanceSum = {};
+                const headers = {
+                    storename: process.env.zortstorename,
+                    apikey:  process.env.zortapikey,
+                    apisecret:  process.env.zortapisecret,
+                };
 
             data.forEach(item => {
                 const { itemcode, available, balance } = item;
@@ -24,7 +29,6 @@ updateStock12T.put('/updateStock12T', async (req, res) => {
                 }
               });
               
-              // แปลงผลลัพธ์ให้เป็น array ตามที่ต้องการ
               const result = Object.keys(itemcodeToAvailableBalanceSum).map(itemcode => ({
                 itemcode,
                 sumavailable: itemcodeToAvailableBalanceSum[itemcode].available,
@@ -62,38 +66,65 @@ updateStock12T.put('/updateStock12T', async (req, res) => {
                                         console.log('testttt'+itcodeOnly+'_'+unitOnly);
                                         var skufind = itcodeOnly+'_'+unitOnly
                                         await Product.update({stock:result[i].sumbalance,availablestock:result[i].sumavailable},{where:{sku:skufind}})
+
+                                       var stocks = [
+                                            {
+                                              "sku": skufind,
+                                              "stock": result[i].sumavailable,
+                                            //   "cost": 999
+                                            }
+                                          ]
+
+                                          const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
+                                            headers: headers,
+                                          });
+
+                                          const responseStock =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductStockList?warehousecode=W0001', {stocks}, {
+                                            headers: headers,
+                                          });
+                                          
+
                                     }else if(unitOnly == restSku.unit){
                                         var skufind = itcodeOnly+'_'+unitOnly
                                         var stockCon = Math.floor(result[i].sumbalance / restSku.factor);
                                         var avistockCon = Math.floor(result[i].sumavailable / restSku.factor);
                                         await Product.update({stock:stockCon,availablestock:avistockCon},{where:{sku:skufind}})
+                                        var stocks = [
+                                            {
+                                              "sku": skufind,
+                                              "stock": avistockCon,
+                                            //   "cost": 999
+                                            }
+                                          ]
+                                          const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
+                                            headers: headers,
+                                          });
+
+                                          const responseStock =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductStockList?warehousecode=W0001', {stocks}, {
+                                            headers: headers,
+                                          });
+
                                     }else if(unitOnly == 'PCS4'){
                                         var skufind = itcodeOnly+'_'+unitOnly
                                         var stockCon = Math.floor(result[i].sumbalance / 4);
                                         var avistockCon = Math.floor(result[i].sumavailable / 4);
                                         await Product.update({stock:stockCon,availablestock:avistockCon},{where:{sku:skufind}})
+                                        var stocks = [
+                                            {
+                                              "sku": skufind,
+                                              "stock": avistockCon,
+                                            //   "cost": 999
+                                            }
+                                          ]
+                                          const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
+                                            headers: headers,
+                                            // params: warehousecode,
+                                          });
+                                          const responseStock =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductStockList?warehousecode=W0001', {stocks}, {
+                                            headers: headers,
+                                          });
                                     }
                                 }
-                            //  if (!response) {
-                            //     return;
-                            // } else {
-                            //     const restdata = response.data;
-                            //     // console.log(restdata[0].type.factor);
-                            //     const restIns = restdata[0].type
-                            //     for(const restSku of restIns){
-                                  
-                            //         if(unitOnly == 'PCS'){
-                            //             console.log('testttt'+itcodeOnly+'_'+unitOnly);
-                            //             var skufind = itcodeOnly+'_'+unitOnly
-                            //             await Product.update({stock:result[i].sumbalance,availablestock:result[i].sumavailable},{where:{sku:skufind}})
-                            //         }else if(unitOnly == restSku.unit){
-                            //             var skufind = itcodeOnly+'_'+unitOnly
-                            //             var stockCon = Math.floor(result[i].sumbalance / restSku.factor);
-                            //             var avistockCon = Math.floor(result[i].sumavailable / restSku.factor);
-                            //             await Product.update({stock:stockCon,availablestock:avistockCon},{where:{sku:skufind}})
-                            //         }
-                            //     }
-                            // }
                         } catch (error) {
                             console.error('Error during Axios POST:', error.message);
                         }

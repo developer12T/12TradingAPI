@@ -5,7 +5,12 @@ const { Order,OrderDetail } = require('../model/Order');
 const { Customer } = require('../model/Customer');
 
 async function AllOrderTab(res) {
-    const data = await Order.findAll({where:{ statusprint:'000'}});
+    const data = await Order.findAll({where:{ 
+        statusprint:'000',
+        status:{
+            [Op.ne]:'Voided'  
+        }
+    }});
     const orders = [];
     for (let i = 0; i < data.length; i++) {
 

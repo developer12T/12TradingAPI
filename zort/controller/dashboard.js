@@ -10,6 +10,7 @@ DasboardView.post('/getData', async (req, res) => {
     try {
         
         const countOrderAll = await Order.count() ;
+        const countOrderVoied = await Order.count({status:'Voided'}) ;
         const countOrderShopee = await Order.count({where:{saleschannel:'Shopee'}}) ;
         const countOrderLazada = await Order.count({where:{saleschannel:'Lazada'}}) ;
         const countOrderWaitPrintReceipt = await Order.count({where:{statusprint:'000',statusprintinv: {
@@ -36,6 +37,7 @@ DasboardView.post('/getData', async (req, res) => {
             'OrderCountOrderCountSuccessPrint':countOrderRePrintInv,
             'StockZort':StockZort,    
             'StockM3':countStockM3,    
+            'countOrderVoied':countOrderVoied
         }])
     } catch (error) {
         console.log(error);

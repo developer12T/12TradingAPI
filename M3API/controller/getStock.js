@@ -126,7 +126,7 @@ getStock.post('/getStockDetail', async (req, res) => {
 
 getStock.post('/getStockCount', async (req, res) => {
   try {
-    const data = await Stock.count()
+    const data = await Stock.count({where:{companycode:410,warehouse:"108"}})
     res.json([{"stockerp":data}]);
 
   } catch (error) {

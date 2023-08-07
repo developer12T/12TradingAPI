@@ -6,10 +6,12 @@ const addProduct = require('../controller/addProduct')
 const updateStock = require('../controller/updateStock')
 const updateStock12T = require('../controller/updateStock12T')
 
+
 ProductManage.use('/ProductManage',getProduct);
 ProductManage.use('/ProductManage',addProduct);
 
 ProductManage.use('/ProductManage',updateStock12T);
+ProductManage.use('/ProductManage',updateStock);
 
 
 
