@@ -25,5 +25,9 @@ getCustomer.post('/getCustomer', async (req, res) => {
     res.json(data) 
 }) ;
 
+getCustomer.post('/getCustomerToErp', async (req, res) => {
+     const data = await Customer.findAll({where:{customeriderp:2}})
+        res.json(data) 
+}) ;
 
 module.exports = getCustomer;    

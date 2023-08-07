@@ -7,6 +7,7 @@ const Order = sequelize.define('order', {
   ordertype: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   number: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   customerid: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
+  customeriderp: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   warehousecode: {type: DataTypes.STRING,allowNull: true,},
   status: {type: DataTypes.STRING,allowNull: true, },
   paymentstatus: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},

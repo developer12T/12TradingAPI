@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 const { Order,OrderDetail } = require('../model/Order')
 const { Customer, ShippingAddress } = require('../model/Customer')
 const sequelize = require('sequelize')
-
+const axios = require('axios')
 getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
       
     try {
@@ -53,6 +53,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
           await Order.update({statusprint:st,totalprint:ci},{where:{id:idOrder}})
         }
        
+        const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOrderErp',{},{});
         res.json(data)      
     } catch (error) {
         console.log(error)

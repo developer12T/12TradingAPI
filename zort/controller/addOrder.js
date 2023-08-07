@@ -184,7 +184,7 @@ addOrder.put('/addOrder', async (req, res) => {
                   if (updatedRows) {
                     updatedCount++;
                   } else {}
-                })
+                }) 
 
               } 
             });
@@ -325,6 +325,105 @@ addOrder.put('/addOrder', async (req, res) => {
             // const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
             }
             
+          }
+        }
+
+        const data3 = await Order.findAll({where:{statusprintinv:'TaxInvoice'}})
+        
+        for(let i=0;i<data3.length;i++){
+          // console.log(`loopp ${i}`+data3[i].customerid);
+          if(data3[i].saleschannel == 'Lazada'){
+            const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addCustomerInv',{
+              customertype:'107',
+              customercode:'OLAZ'
+              }, {
+              headers: {
+              },
+            });
+              const restdata = response.data ;
+              const data4 = await Order.count({ where:{statusprintinv:'TaxInvoice', customeriderp:{[Op.like]: `%OLAZ%`,} }})
+
+              if(data4 == 0){
+                let numbersOnly = restdata[0].customercode.slice(4);
+                let numbersPlusOne = String(parseInt(numbersOnly) + 1);
+                // let finalResult = "OLAZ" + "00" + numbersPlusOne.padStart(numbersOnly.length, "0");
+                let finalResult = "OLAZ" + "00" + numbersPlusOne;
+                console.log(finalResult);
+                await Customer.update({customercode:finalResult,customeriderp:2},{where:{customerid:data3[i].customerid}})
+                await Order.update({customeriderp:finalResult},{where:{customerid:data3[i].customerid}})
+
+              }else{
+
+                const data5 = await Order.findAll({ 
+                  where:{
+                    statusprintinv:'TaxInvoice', 
+                    customeriderp:{
+                      [Op.like]: `%OLAZ%`
+                      ,} 
+                    },
+                      limit:1, 
+                      order: [['customeriderp', 'DESC']]
+
+                  })
+                  console.log(data5[0].customeriderp);
+
+                  let numbersOnly = data5[0].customeriderp.slice(4);
+                  let numbersPlusOne = String(parseInt(numbersOnly) + 1);
+                  let finalResult = "OLAZ" + "00" + numbersPlusOne;
+                  console.log(finalResult);
+
+                  await Customer.update({customercode:finalResult,customeriderp:2},{where:{customerid:data3[i].customerid}})
+                  await Order.update({customeriderp:finalResult},{where:{customerid:data3[i].customerid}})
+
+              }
+              // console.log(restdata[0].customercode);
+           
+
+          }else if(data3[i].saleschannel == 'Shopee'){
+            const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addCustomerInv',{
+              customertype:'107',
+              customercode:'OSPE'
+              }, {
+              headers: {
+              },
+            });
+              const restdata2 = response.data ;
+              const data4 = await Order.count({ where:{statusprintinv:'TaxInvoice', customeriderp:{[Op.like]: `%OSPE%`,} }})
+
+              if(data4 == 0){
+                let numbersOnly = restdata2[0].customercode.slice(4);
+                let numbersPlusOne = String(parseInt(numbersOnly) + 1);
+                // let finalResult = "OLAZ" + "00" + numbersPlusOne.padStart(numbersOnly.length, "0");
+                let finalResult = "OSPE" + "00" + numbersPlusOne;
+                console.log(finalResult);
+                await Customer.update({customercode:finalResult,customeriderp:1},{where:{customerid:data3[i].customerid}})
+                await Order.update({customeriderp:finalResult},{where:{customerid:data3[i].customerid}})
+
+              }else{
+
+                const data5 = await Order.findAll({ 
+                  where:{
+                    statusprintinv:'TaxInvoice', 
+                    customeriderp:{
+                      [Op.like]: `%OSPE%`
+                      ,} 
+                    },
+                      limit:1, 
+                      order: [['customeriderp', 'DESC']]
+
+                  })
+                  console.log(data5[0].customeriderp);
+
+                  let numbersOnly = data5[0].customeriderp.slice(4);
+                  let numbersPlusOne = String(parseInt(numbersOnly) + 1);
+                  let finalResult = "OSPE" + "00" + numbersPlusOne;
+                  console.log(finalResult);
+
+                  await Customer.update({customercode:finalResult,customeriderp:1},{where:{customerid:data3[i].customerid}})
+                  await Order.update({customeriderp:finalResult},{where:{customerid:data3[i].customerid}})
+
+              }
+              const restdata = response.data ;
           }
         }
   

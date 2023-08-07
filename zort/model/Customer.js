@@ -3,6 +3,7 @@ const { Order } = require('./Order')
 const Customer = sequelize.define('customer', {
     autoCusId:{ type: DataTypes.INTEGER,allowNull: false,primaryKey: true,autoIncrement: true},
     customerid: { type: DataTypes.INTEGER,allowNull: true},
+    customeriderp: { type: DataTypes.STRING,allowNull: true},
     customername:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
     customercode:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
     customeridnumber:{type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
