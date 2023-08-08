@@ -10,6 +10,8 @@ async function receiptSuccessTab(res) {
             [Op.or]: [
                 { statusprint: '001' },
                 { statusprint: '002' },
+                {statusPrininvSuccess:'001'},
+                {statusPrininvSuccess:'002'}
             ]
         }
     });

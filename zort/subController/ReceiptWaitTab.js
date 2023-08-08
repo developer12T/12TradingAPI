@@ -8,9 +8,9 @@ async function receiptWaitTab(res) {
     const data = await Order.findAll({
         where: {
             statusprint: '000',
-            statusprintinv: {
-                [Op.not]: 'TaxInvoice'
-            }
+            // statusprintinv: {
+            //     [Op.not]: 'TaxInvoice'
+            // }
 
         }
     });
@@ -42,6 +42,11 @@ async function receiptWaitTab(res) {
             totalprice: item.totalprice
         }));
 
+        if(data[i].totalprint == null){
+            var totalprint = 0
+        }else{
+            var totalprint =data[i].totalprint
+        }
         const order = {
             id: data[i].id,
             // saleschannel: data[i].saleschannel,
@@ -62,7 +67,7 @@ async function receiptWaitTab(res) {
             shippingpostcode: data[i].shippingpostcode,
             createdatetime:data[i].createdatetime,
             statusprint: data[i].statusprint,
-            totalprint:data[i].totalprint,
+            totalprint:totalprint,
             saleschannel: data[i].saleschannel,
             item: items,
             customer: cuss,

@@ -34,7 +34,6 @@ getOrder.post('/getOrder', async (req, res) => {
                 M3SuccessTab(res).then(orders => {res.json(orders); })
             }
         }
-
     } catch (error) {
         res.status(500).json('invalid data')
         console.log(error);

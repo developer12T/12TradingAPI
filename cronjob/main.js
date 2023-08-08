@@ -5,8 +5,19 @@ const cron = require('node-cron');
 const zortCronFunc = require('./zortCorn');
 
 
-cron.schedule('*/5 * * * * *', () => {
-    zortCronFunc();
+let count = 0;
+cron.schedule('*/1 * * * * *',async () => {
+    const startTime = new Date();
+    count++;
+  await  zortCronFunc();
+  const endTime = new Date();
+  const elapsedTime = (endTime - startTime) / 1000; // เวลาในหน่วยวินาที
+
+  console.log(`Cron job has run ${count} times.`);
+  console.log(`Start time: ${startTime}`);
+  console.log(`End time: ${endTime}`);
+  console.log(`Elapsed time: ${elapsedTime} seconds`);
+  
 });
 
 

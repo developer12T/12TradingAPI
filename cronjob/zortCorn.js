@@ -1,11 +1,13 @@
 // myCronJobFunction.js
-function zortCronFunc() {
-    // วางโค้ดหรือฟังก์ชันที่คุณต้องการให้ cron job ทำงานที่นี่
-    console.log('My cron job is running!');
-    // ... ตัวอย่างเช่น ...
-    // ส่งอีเมล
-    // ประมวลผลข้อมูล
-    // เรียกใช้ API ภายนอก
+async function zortCronFunc() {
+
+    const token = jwt.sign(
+      { username: 'systemm3' },
+      process.env.TOKEN_KEY,
+      { expiresIn: '2h' }) 
+
+    const response = await axios.post(process.env.API_URL+'/zort/order/OrderManage/addOrder',{ token:token },{});
+    // console.log('My cron job is running!');
   }
   
   module.exports = zortCronFunc;

@@ -167,7 +167,12 @@ addOrder.put('/addOrder', async (req, res) => {
                 var inNo = (inv12tcon + 1);
                 var invnumber = inNo ;
               }
-              var seNo = (numberser.data[0].lastno+i);  
+              if(i == 0){
+                var seNo = (numberser.data[0].lastno+1);  
+              }else{
+                var seNo = (numberser.data[0].lastno+i);  
+              }
+            
               var lastnumber = seNo ;
 
 
@@ -189,8 +194,6 @@ addOrder.put('/addOrder', async (req, res) => {
              }, {});
           }
 
-
-        
           for (const item of data2) {
               createddate = currentDate;
               const { customerid, customername, customercode ,customeridnumber,customeremail,customerphone,customeraddress,customerpostcode,customerprovince,customerdistrict,customersubdistrict,customerstreetAddress,customerbranchname,customerbranchno,facebookname,facebookid,line,lineid} = item;
@@ -210,7 +213,6 @@ addOrder.put('/addOrder', async (req, res) => {
                     updatedCount++;
                   } else {}
                 }) 
-
               } 
             });
   
@@ -239,22 +241,50 @@ addOrder.put('/addOrder', async (req, res) => {
 
               await OrderDetail.create({
                 id:data2[i].id,
-                productid:8888888,
+                productid:8888888, //disonline
                 name:itemDisOnline.data[0].itemname,
-                sku:itemDisOnline.data[0].itemcode,
+                sku:itemDisOnline.data[0].itemcode+'_PCS',
                 number:1,
                 unittext:'PCS',
+                pricepernumber:data2[i].sellerdiscount,
                 totalprice:data2[i].sellerdiscount
               })
+
             }
-            await OrderDetail.create({id:data2[i].id,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001',number:1,totalprice:data2[i].shippingamount,unittext:'PCS'})
+            
+           
+              if(data2[i].saleschannel == 'Lazada'){
+                if((data2[i].shippingamount - data2[i].discountamount) == 0){
+
+                }else{
+                  await OrderDetail.create({id:data2[i].id,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001_JOB',number:1,totalprice:data2[i].shippingamount,pricepernumber:data2[i].shippingamount,unittext:'JOB'})
+                }
+              }else if(data2[i].saleschannel == 'Shopee'){
+                if(data2[i].shippingamount == 0){
+
+                }else{
+                  await OrderDetail.create({id:data2[i].id,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001_JOB',number:1,totalprice:data2[i].shippingamount,pricepernumber:data2[i].shippingamount,unittext:'JOB'})
+                }
+              }
+            
+           
+           
             for(const list of data2[i].list){
               // console.log(data2[i].id) 
               const { auto_id, ...orderDatadetail } = list ; 
               orderDatadetail.id = data2[i].id ;
           
               await OrderDetail.bulkCreate([orderDatadetail])
-              await OrderDetail.update({procode:'FV2F',pricepernumber:0,discount:0,discountamount:0},{where:{totalprice:0}}) 
+              await OrderDetail.update({procode:'FV2F',pricepernumber:0,discount:0,discountamount:0},
+              {where:{
+                totalprice:0,
+                sku:{
+                  [Op.ne]:'ZNS1401001'
+                },
+                productid:{
+                  [Op.ne]:'8888888'
+                }
+              }}) 
             }
         }
   

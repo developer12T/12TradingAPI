@@ -3,18 +3,24 @@ const getOrder = express.Router();
 const { Op } = require('sequelize');
 const { Order,OrderDetail } = require('../model/Order');
 const { Customer } = require('../model/Customer');
-
+const axios = require('axios')
 async function M3WaitTab(res) {
-    const data = await Order.findAll({
+
+    const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getOrderErp',{ },{});
+  const listid =  response.data
+  const datapre = []
+  for(const datanumber of listid){
+
+    const dataindex = await Order.findAll({
         where: {
-            [Op.or]: [
-                {   statusPrininvSuccess: '001' },
-                {   statusPrininvSuccess: '002' },
-                { statusprint: '001' },
-                { statusprint: '002' },
-            ]
+            number:datanumber.number
         }
     });
+
+    datapre.push(dataindex)
+  }
+
+const data = datapre[0]
     const orders = [];
 
     for (let i = 0; i < data.length; i++) {

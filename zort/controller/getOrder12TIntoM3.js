@@ -22,10 +22,9 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
             where: {
                 [Op.or]: [
                     {   statusPrininvSuccess: '001' },
-                    {   statusPrininvSuccess: '002' },
                     { statusprint: '001' },
-                    { statusprint: '002' },
-                ]
+                ],
+                totalprint:1
             }
         });
         const orders = [];
@@ -62,7 +61,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                 totalprice: item.totalprice,
                 procode: item.procode
             }));
-    
+
             const order = {
                 id: data[i].id,
                 // saleschannel: data[i].saleschannel,

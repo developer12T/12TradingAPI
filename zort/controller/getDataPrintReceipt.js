@@ -23,13 +23,13 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
             {
               model: OrderDetail,
               required: false,
-              attributes: ['productid','name','number','pricepernumber','totalprice'],
+              attributes: ['productid','name','number','pricepernumber','totalprice','sku'],
               separate: false,
             },
             {
               model: ShippingAddress,
               required:false,
-              attributes:['shippingaddress']
+              attributes:['shippingaddress','shippingpostcode']
             }
           ],
         });  
@@ -52,8 +52,11 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
         }else{
           await Order.update({statusprint:st,totalprint:ci},{where:{id:idOrder}})
         }
-       
-        const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOrderErp',{},{});
+       if(req.body.action == 'lastRowActionToDataErp'){
+         const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOrderErp',{},{});
+       }
+        // 
+
         res.json(data)      
     } catch (error) {
         console.log(error)

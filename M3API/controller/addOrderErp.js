@@ -29,44 +29,30 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
 
           for(const order of response.data ){
             const list = order.item
-            for(let i =0;i<list.length;i++){
+            for(let i = 0;i<list.length;i++){
                 console.log(i);
                     const query = `
-                    INSERT INTO [dbo].[data_order] (OAORDT,
-                        RLDT,
-                        ORNO,
-                        CUOR,
-                        OAORTP,
-                        WHLO,
-                        FACI,
-                        OAFRE1,
-                        OAOREF,
-                        OAYREF,
-                        CUNO,
-                        ADID,
-                        OBPONR,
-                        OBITNO,
-                        OBALUN,
-                        OBORQA,
-                        OBSAPR,
-                        OBDIA2,
-                        OBPIDE,
-                        OBSMCD,
-                        OARESP,
-                        CHANNEL,
-                        STATUS,
-                        INSERT_AT,
-                        UPDATE_AT
-                        ) 
+                    INSERT INTO [dbo].[data_order] (OAORDT,RLDT,ORNO,CUOR,OAORTP,WHLO,FACI,OAFRE1,OAOREF,OAYREF,CUNO,ADID,OBPONR,OBITNO,
+                        OBALUN,OBORQA,OBSAPR,OBDIA2,OBPIDE,OBSMCD,OARESP,CHANNEL,STATUS,INSERT_AT,UPDATE_AT) 
                     VALUES (:value1,:value2,:value3,:value4,:value5,:value6,:value7,:value8,:value9,:value10,:value11,:value12,:value13,:value14,:value15,
                         :value16,:value17,:value18,:value19,:value20,:value21,:value22,:value23,:value24,:value25)
                     `;
                         var orderdatenum = parseInt(order.orderdateString.replace(/-/g, ''), 10)
                         if(!list[i].unit){
-                            var unittext = 'PCS'
+                            if(list[i].sku == 'ZNS1401001'){
+                                var unittext = 'JOB'
+                            }else{
+                                var unittext = 'PCS'
+                            }
+                          
                         }else{
-                            var unittext =list[i].unit
+                            if(list[i].unit.length > 3){
+                                var unittext =list[i].unit.slice(0, 3)
+                            }else{
+                                var unittext =list[i].unit
+                            }    
                         }
+
                         if(list[i].pricepernumber == null){
                             var pricenumber = 0
                         }else{
@@ -86,16 +72,22 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
                                 var pcode = ''
                             }
                         }
+                        if(list[i].productid == '8888888'){
+                            var qty =  -list[i].number
+                        }else{
+                          var qty =  list[i].number
+                        }
+
                     const replacements = { 
                         value1:orderdatenum,  value11: order.customercode,    value21: 'SA02',        
                         value2:orderdatenum,  value12: '',                    value22: 'ONLINE',     
                         value3:order.cono,    value13: i+1,                   value23:0,     
                         value4: order.inv,    value14: list[i].sku,           value24: currentDate,     
                         value5:'071',         value15:unittext,               value25: currentDate,  
-                        value6: '108',        value16:list[i].number,       
+                        value6: '108',        value16:qty,       
                         value7: 'F10',        value17:pricenumber, 
                         value8: 'YSEND',      value18:0,       
-                        value9: order.number, value19:pcode,    
+                        value9:  order.number , value19:pcode,    
                         value10: '',           value20: '11002',     
                     }
                     const result = await sequelize.query(query, {
@@ -109,9 +101,6 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
           console.log(error)
           res.json('Invalid data')
         }
-   
-
-
 }),
 
   module.exports = addOrderErp
