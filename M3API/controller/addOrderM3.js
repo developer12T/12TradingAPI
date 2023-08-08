@@ -15,7 +15,7 @@ addOrderM3.post('/addOrderM3', async (req, res) => {
     //     });
 
         try {
-                    const query = ``;
+                    const query = `EXEC [192.168.2.97].[DATA_ERP].[dbo].[addOrderToM3]`;
                     const replacements = {}
                     const result = await sequelize.query(query, {
                         replacements,
