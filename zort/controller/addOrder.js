@@ -44,6 +44,7 @@ addOrder.put('/addOrder', async (req, res) => {
           //     newDataList.splice(indexToRemove, 1);
           //   }
           // }
+          
           const existingIds = (await OrderHis.findAll()).map(item => item.id);
           const newDataList = datapre.list.filter(item => !existingIds.includes(item.id));
           const filteredDataList = [];

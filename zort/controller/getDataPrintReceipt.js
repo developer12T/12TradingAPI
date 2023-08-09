@@ -29,7 +29,8 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
             {
               model: ShippingAddress,
               required:false,
-              attributes:['shippingaddress','shippingpostcode']
+              attributes:['shippingaddress','shippingpostcode'],
+              separate: false,
             }
           ],
         });  
@@ -56,6 +57,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
          const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOrderErp',{},{});
        }
         // 
+        
 
         res.json(data)      
     } catch (error) {

@@ -27,8 +27,26 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
 
           const response = await axios.post(process.env.API_URL+'/zort/order/OrderManage/getOrder12TIntoM3',{ token:token },{});
 
-          for(const order of response.data ){
-            const list = order.item
+          for(const orderData of response.data ){
+
+            const list = orderData.item
+                     .sort((a, b) => {
+                         const regex = /^[0-9]/; 
+                         const aStartsWithNumber = regex.test(a.sku);
+                         const bStartsWithNumber = regex.test(b.sku);
+
+                         if (aStartsWithNumber && !bStartsWithNumber) {
+                             return -1;
+                         } else if (!aStartsWithNumber && bStartsWithNumber) {
+                             return 1;
+                         } else {
+                             return a.sku.localeCompare(b.sku);
+                         }
+                     });
+
+                    // console.log(list)
+
+            // const list = order.item
             for(let i = 0;i<list.length;i++){
                 console.log(i);
                     const query = `
@@ -37,7 +55,7 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
                     VALUES (:value1,:value2,:value3,:value4,:value5,:value6,:value7,:value8,:value9,:value10,:value11,:value12,:value13,:value14,:value15,
                         :value16,:value17,:value18,:value19,:value20,:value21,:value22,:value23,:value24,:value25)
                     `;
-                        var orderdatenum = parseInt(order.orderdateString.replace(/-/g, ''), 10)
+                        var orderdatenum = parseInt(orderData.orderdateString.replace(/-/g, ''), 10)
                         if(!list[i].unit){
                             if(list[i].sku == 'ZNS1401001'){
                                 var unittext = 'JOB'
@@ -79,15 +97,15 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
                         }
 
                     const replacements = { 
-                        value1:orderdatenum,  value11: order.customercode,    value21: 'SA02',        
+                        value1:orderdatenum,  value11: orderData.customercode,    value21: 'SA02',        
                         value2:orderdatenum,  value12: '',                    value22: 'ONLINE',     
-                        value3:order.cono,    value13: i+1,                   value23:0,     
-                        value4: order.inv,    value14: list[i].sku,           value24: currentDate,     
+                        value3:orderData.cono,    value13: i+1,                   value23:0,     
+                        value4: orderData.inv,    value14: list[i].sku,           value24: currentDate,     
                         value5:'071',         value15:unittext,               value25: currentDate,  
                         value6: '108',        value16:qty,       
                         value7: 'F10',        value17:pricenumber, 
                         value8: 'YSEND',      value18:0,       
-                        value9:  order.number , value19:pcode,    
+                        value9:  orderData.number , value19:pcode,    
                         value10: '',           value20: '11002',     
                     }
                     const result = await sequelize.query(query, {

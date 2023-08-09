@@ -11,7 +11,7 @@ const DasboardView = require('./controller/dashboard');
 router.use('/order', OrderManage);
 router.use('/product', ProductManage);
 router.use('/rest12Tzort',ZortRestApi);
-router.use('/dashboard',DasboardView);
+router.use('/infor',DasboardView);
 router.use('/syncdatabase',syncdatabase);
 
 module.exports = router
