@@ -11,7 +11,7 @@ const { Customer } = require('../model/customer')
 const currentDate = moment().utcOffset(7).format('YYYY-MM-DD');
 // const currentDate = moment().format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 
-addCustomerInv.post('/addCustomerInv', async (req, res) => {
+addCustomerInv.post('/getCustomerInv', async (req, res) => {
    const custype = req.body.customertype
    const cuscode = req.body.customercode
         try{
