@@ -1,5 +1,5 @@
 const express = require('express');
-const getOrder = express.Router();
+const getOrder12T = express.Router();
 
 const receiptWaitTab = require('../subController/ReceiptWaitTab'); 
 const receiptSuccessTab = require('../subController/ReceiptSuccessTab'); 
@@ -8,8 +8,9 @@ const invtWaitTab = require('../subController/InvWaitTab');
 const invSuccessTab = require('../subController/InvSuccessTab'); 
 const M3WaitTab = require('../subController/M3WaitTab'); 
 const M3SuccessTab = require('../subController/M3SuccessTab'); 
+const { Order } = require('../model/Order');
 
-getOrder.post('/getOrder', async (req, res) => {
+getOrder12T.post('/getOrder', async (req, res) => {
     var page = req.body.page;
     var tab = req.body.tab;
     try {
@@ -21,6 +22,8 @@ getOrder.post('/getOrder', async (req, res) => {
             }
         } else if (page == 'all') {
                 AllOrderTab(res).then(orders => {res.json(orders); })
+                // const data = await Order.findAll()
+                // res.json(data)
         } else if (page == 'inv') {
             if (tab == 'wait-tab') {
                 invtWaitTab(res).then(orders => {res.json(orders); })
@@ -42,4 +45,4 @@ getOrder.post('/getOrder', async (req, res) => {
 });
 
 
-module.exports = getOrder;
+module.exports = getOrder12T;

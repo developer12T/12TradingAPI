@@ -1,17 +1,16 @@
 const express = require('express');
-const getOrder = express.Router();
+// const getOrder = express.Router();
 const { Op } = require('sequelize');
 const { Order,OrderDetail } = require('../model/Order');
 const { Customer } = require('../model/Customer');
 
 async function AllOrderTab(res) {
     try {
-        const data = await Order.findAll({where:{ 
-            statusprint:'000',
-            status:{
-                [Op.ne]:'Voided'  
+        const data = await Order.findAll({
+            where:{
+                statusprint:'000'
             }
-        }});
+        });
         const orders = [];
         for (let i = 0; i < data.length; i++) {
     
@@ -30,7 +29,9 @@ async function AllOrderTab(res) {
                 }
             })
     
-            const cuss = cusdata[0].customername;
+            // const cuss = cusdata[0];
+            const cuss = cusdata[0]?.customername || '';
+
             const items = itemData.map(item => ({
                 productid: item.productid,
                 sku: item.sku.split('_')[0],
@@ -72,6 +73,7 @@ async function AllOrderTab(res) {
         
         return orders;
     } catch (error) {
+        console.log(error)
         return { status: 'dataNotFound' };
     }
    

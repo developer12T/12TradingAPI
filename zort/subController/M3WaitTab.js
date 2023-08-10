@@ -10,54 +10,34 @@ async function M3WaitTab(res) {
         const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getOrderErp',{ },{});
         const listid =  response.data
         const datapre = []
-        for(const datanumber of listid){
+        const orders = [];
+        for(let i =0;i<listid.length;i++){
       
           const dataindex = await Order.findAll({
               where: {
-                  number:datanumber.number
+                  number:listid[i].number
               }
           });
       
-          datapre.push(dataindex)
+          datapre.push(dataindex[0])
         }
       
-      const data = datapre[0]
-          const orders = [];
-      
-          for (let i = 0; i < data.length; i++) {
-              const itemData = await OrderDetail.findAll({
-                  attributes: ['productid', 'sku', 'name', 'number', 'pricepernumber', 'totalprice'],
-                  where: {
-                      id: data[i].id
-                  }
-              });
-      
+      const data = datapre
+
+          for (let i = 0; i < data.length; i++) {      
               const cusdata = await Customer.findAll({
-                  attributes: ['customername'],
+                attributes: ['customername','customerid'],
                   where: {
-                      customerid: data[i].customerid
+                      customerid: '60155748'
                   }
               })
       
       
-              const cuss = cusdata[0].customername;
-              // console.log(itemData);
-      
-              // console.log(cuss)
-              // var itskulist = listofdetail.sku.split('_')[1] ;
-              const items = itemData.map(item => ({
-                  productid: item.productid,
-                  sku: item.sku.split('_')[0],
-                  unit: item.sku.split('_')[1],
-                  name: item.name,
-                  number: item.number,
-                  pricepernumber: item.pricepernumber,
-                  totalprice: item.totalprice
-              }));
-      
+          
+              const cuss = cusdata[0]?.customername || '';
+            
               const order = {
                   id: data[i].id,
-                  // saleschannel: data[i].saleschannel,
                   cono:data[i].cono,
                   invno:data[i].invno,
                   orderdate: data[i].orderdate,
@@ -79,7 +59,6 @@ async function M3WaitTab(res) {
                   statusprint: data[i].statusprint,
                   totalprint:data[i].totalprint,
                   saleschannel: data[i].saleschannel,
-                  item: items,
                   customer: cuss,
               };
               orders.push(order);
@@ -87,6 +66,7 @@ async function M3WaitTab(res) {
       
           return orders;
     } catch (error) {
+        console.log(error);
         return { status: 'dataNotFound' };
     }
   }

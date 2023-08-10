@@ -22,14 +22,15 @@ async function invtWaitTab(res) {
         });
 
         const cusdata = await Customer.findAll({
-            attributes: ['customername'],
+            attributes: ['customername','customerid'],
             where: {
                 customerid: data[i].customerid
             }
         })
 
 
-        const cuss = cusdata[0].customername;
+        // const cuss = cusdata[0].customername;
+        const cuss = cusdata[0]?.customername || '';
         // console.log(itemData);
 
         // console.log(cuss)

@@ -27,13 +27,14 @@ async function receiptSuccessTab(res) {
             });
     
             const cusdata = await Customer.findAll({
-                attributes: ['customername'],
+                attributes: ['customername','customerid'],
                 where: {
                     customerid: data[i].customerid
                 }
             })
     
-            const cuss = cusdata[0].customername;
+            // const cuss = cusdata[0].customername;
+            const cuss = cusdata[0]?.customername || '';
             // console.log(itemData);
             // console.log(cuss)
             // var itskulist = listofdetail.sku.split('_')[1] ;

@@ -26,7 +26,13 @@ getCustomer.post('/getCustomer', async (req, res) => {
 }) ;
 
 getCustomer.post('/getCustomerToErp', async (req, res) => {
-     const data = await Customer.findAll({where:{customeriderp:2}})
+    const data = await Customer.findAll({
+        where: {
+          customeridnumber: {
+            [Op.not]: '' 
+          }
+        }
+      });
         res.json(data) 
 }) ;
 

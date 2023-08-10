@@ -13,7 +13,7 @@ const orderDataAll = async (req,res) => {
     const currentDate = new Date();
     const formattedDate = formatDate(currentDate);
 
-    const response = await axios.get(process.env.zortapiopenurlOrder+`?Orderdateafter=${formattedDate}`, {
+    const response = await axios.get(process.env.zortapiopenurlOrder, {
     // const response = await axios.get(process.env.zortapiopenurlOrder+'?Orderdateafter=2023-08-10', {
         headers: {
           storename: process.env.zortstorename,

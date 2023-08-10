@@ -32,7 +32,8 @@ async function invSuccessTab(res) {
             }
         })
 
-        const cuss = cusdata[0].customername;
+        // const cuss = cusdata.customername;
+        const cuss = cusdata[0]?.customername || '';
         // console.log(itemData);
 
         // console.log(cuss)

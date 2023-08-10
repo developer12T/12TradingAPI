@@ -51,8 +51,9 @@ addCustomerInv.post('/addCustomerInvToERP', async (req, res) => {
             { expiresIn: '2h' }) 
 
           const response = await axios.post(process.env.API_URL+'/zort/rest12Tzort/12Trading/getCustomerToErp',{ token:token },{});
-          for(const cus of response.data ){
 
+
+          for(const cus of response.data ){
             const query = `
             INSERT INTO [dbo].[data_customer] (
               companycode,customercode,customertype,searchkey,customername,address1,
