@@ -19,14 +19,9 @@ require('moment/locale/th');
               "paymentstatus": item.paymentstatus
             };
           });
-
-          
-
-            
+     
           // const order = await Order.findAll({attributes:['id','status','paymentstatus']})
           const order = await Order.findAll({attributes:['id','status','paymentstatus'],where:{status:{[Op.not]:['Success','Voided']}}})
-          
-
           const orderHis = await OrderHis.findAll({attributes:['id','status','paymentstatus'],where:{status:{[Op.not]:['Success','Voided']}}})
 
           // const uniqueOrders = order.filter(orderItem => {
