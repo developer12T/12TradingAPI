@@ -30,8 +30,7 @@ try {
           for (const item of data) {
             if (item.saleschannel === "Lazada") {
                 orderTaxLazada.push(item)
-            }
-            if(item.saleschannel === "Shopee"){
+            }else if(item.saleschannel === "Shopee"){
                 orderTaxShopee.push(item);
             }
           }
@@ -62,14 +61,7 @@ try {
                 const newCustomerCode = 'OLAZ' + newNumericPart;
 
                 // const updatetozort = await axios.post(process.env.UpdateContact+`?id=60327271`,{code:'OSPE003008'}, {
-                const updatetozort = await axios.post(process.env.UpdateContact+`?id=${orderTaxLazada[i].customerid}`,{code:newCustomerCode}, {
-                    headers: {
-                        storename: process.env.zortstorename,
-                        apikey: process.env.zortapikey,
-                        apisecret: process.env.zortapisecret,
-                  
-                      },
-                });
+               
 
                 // const addressArray = new Array(4).fill('');
                 const chunk1 = orderTaxLazada[i].customeraddress.substring(0, 35);
@@ -99,7 +91,7 @@ try {
                 `;
     
                 const replacements = { 
-                    value1:410, value2:orderTaxLazada[i].customercode, value3:'107',    value4: orderTaxLazada[i].customername.substring(0, 10), value5:orderTaxLazada[i].customername,                                                                              
+                    value1:410, value2:newCustomerCode, value3:'107',    value4: orderTaxLazada[i].customername.substring(0, 10), value5:orderTaxLazada[i].customername,                                                                              
                     value6: chunk1,     value7: chunk2,         value8: chunk3,         value9: chunk4, value10: orderTaxLazada[i].customerphone,                                                                          
                     value11: '11002',   value12: '071',         value13: '108',         value14: 'ON',  value15:'O00000001',                                   
                     value16:orderTaxLazada[i].customerpostcode,        value18:'ON101', value19:'R',                                   
@@ -113,12 +105,19 @@ try {
                   type: sequelize.QueryTypes.INSERT
               }); 
               console.log(result);
+              const addCusm3 = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOnlineCustomerM3',{}, {});
+              const updatetozort = await axios.post(process.env.UpdateContact+`?id=${orderTaxLazada[i].customerid}`,{code:newCustomerCode}, {
+                headers: {
+                    storename: process.env.zortstorename,
+                    apikey: process.env.zortapikey,
+                    apisecret: process.env.zortapisecret,
+              
+                  },
+            });
             }
-            // const addCusm3 = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOnlineCustomerM3',{}, {});
+          
                 // res.json(orderTaxLazada)
-          }
-
-          if(orderTaxShopee.length > 0){
+          }else if(orderTaxShopee.length > 0){
            for(let i = 0;i<orderTaxShopee.length;i++){
                 const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getCustomerInv',{
                     customertype:'107',
@@ -144,14 +143,7 @@ try {
                 const newCustomerCode = 'OSPE' + newNumericPart;
 
                 // const updatetozort = await axios.post(process.env.UpdateContact+`?id=60327271`,{code:'OSPE003008'}, {
-                const updatetozort = await axios.post(process.env.UpdateContact+`?id=${orderTaxShopee[i].customerid}`,{code:newCustomerCode}, {
-                    headers: {
-                        storename: process.env.zortstorename,
-                        apikey: process.env.zortapikey,
-                        apisecret: process.env.zortapisecret,
-                  
-                      },
-                });
+              
 
                 // const addressArray = new Array(4).fill('');
                 const chunk1 = orderTaxShopee[i].customeraddress.substring(0, 35);
@@ -182,7 +174,7 @@ try {
                 `;
     
                 const replacements = { 
-                    value1:410, value2:orderTaxShopee[i].customercode, value3:'107',    value4: orderTaxShopee[i].customername.substring(0, 10), value5:orderTaxShopee[i].customername,                                                                              
+                    value1:410, value2:newCustomerCode, value3:'107',    value4: orderTaxShopee[i].customername.substring(0, 10), value5:orderTaxShopee[i].customername,                                                                              
                     value6: chunk1,     value7: chunk2,         value8: chunk3,         value9: chunk4, value10: orderTaxShopee[i].customerphone,                                                                          
                     value11: '11002',   value12: '071',         value13: '108',         value14: 'ON',  value15:'O00000001',                                   
                     value16:orderTaxShopee[i].customerpostcode,        value18:'ON101', value19:'R',                                   
@@ -195,6 +187,16 @@ try {
                   replacements,
                   type: sequelize.QueryTypes.INSERT
               }); 
+
+              const addCusm3 = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOnlineCustomerM3',{}, {});
+              const updatetozort = await axios.post(process.env.UpdateContact+`?id=${orderTaxShopee[i].customerid}`,{code:newCustomerCode}, {
+                headers: {
+                    storename: process.env.zortstorename,
+                    apikey: process.env.zortapikey,
+                    apisecret: process.env.zortapisecret,
+              
+                  },
+            });
 
             }
                 // res.json(orderTaxShopee)

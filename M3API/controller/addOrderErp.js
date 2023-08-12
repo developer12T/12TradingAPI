@@ -44,7 +44,7 @@ addOrderErp.post('/addOrderErp', async (req, res) => {
                          }
                      });
 
-                    // console.log(list)
+                    // console.log(orderData)
 
             // const list = order.item
             for(let i = 0;i<list.length;i++){

@@ -7,7 +7,7 @@ const axios = require('axios')
 async function M3WaitTab(res) {
     try {
 
-        const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getOrderErp',{ },{});
+        const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getOrderErpToShow',{ },{});
         const listid =  response.data
         const datapre = []
         const orders = [];
@@ -28,7 +28,7 @@ async function M3WaitTab(res) {
               const cusdata = await Customer.findAll({
                 attributes: ['customername','customerid'],
                   where: {
-                      customerid: '60155748'
+                      customerid: data[i].customerid
                   }
               })
       

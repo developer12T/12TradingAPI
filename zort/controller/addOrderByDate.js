@@ -34,7 +34,16 @@ addOrder.put('/addOrderBydate', async (req, res) => {
 
         // 1. ไปเรียกข้อมูลจาก Zort 
           const datapre = await orderDataZort() ;
-
+          // const datapre = {
+          //   "res": {
+          //       "resCode": "200",
+          //       "resDesc": "",
+          //       "resDesc2": null,
+          //       "resDesc3": null,
+          //       "detail": null
+          //   },
+          //   "list": [{}]
+          //   }
         //2. อัปเดต ข้อมูลที่ได้มาจาก zort เพื่อปรับให้ lazada เหมือนกับ shopee
           const updatedData = datapre.list.map(data => {
             if (data.saleschannel === "Lazada" && (!data.tag || data.tag === "")) {
@@ -59,10 +68,20 @@ addOrder.put('/addOrderBydate', async (req, res) => {
 
         //7. ทำการแยก ออเดอ ระหว่าง มี customercode และไม่มี customercode แต่ ยังเอา id ที่มีใน order มาใช้และ insert
           for (const item of newDataListOrder) {
-            if (item.status !== "Voided" && item.customercode === "") {
+            if (item.customercode === "") {
+              if(item.status !== "Voided"){
                 orderTaxShopee.push(item)
+              }else{
+               
+              }
+               
             }else{
+              if(item.status !== "Voided"){
                 filteredDataList.push(item);
+              }else{
+               
+              }
+                
             }
           }
 
@@ -70,7 +89,7 @@ addOrder.put('/addOrderBydate', async (req, res) => {
           const token = jwt.sign({ username: 'systemm3' },process.env.TOKEN_KEY,{ expiresIn: '2h' }) 
           
         //9. เอาตัวแปรที่ได้จาก 4. มาใช้ เพื่อ ให้ customercode ออเดอ อัพเดตใหม่
-        // const response =  axios.put(process.env.API_URL+`/zort/customer/CustomerManage/updateCustomerInv?token=${token}`,{dataOrder:orderTaxShopee },{});
+        const response =  axios.put(process.env.API_URL+`/zort/customer/CustomerManage/updateCustomerInv?token=${token}`,{dataOrder:orderTaxShopee },{});
 
         //10. กำหนด data2 ให้เท่ากับ order ใหม่
           const data2 = filteredDataList;
@@ -93,11 +112,13 @@ addOrder.put('/addOrderBydate', async (req, res) => {
                 // console.log(addCustomer.data);
               }
 
-              const updateStatusOrder = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/updateStatusOrder?token=${token}`,{},{});
+              // const updateStatusOrder = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/updateStatusOrder?token=${token}`,{},{});
               res.json({log:'Add Complete'})
             }else{
               res.json({log:'no orderNew'})
             }
+
+        // res.json(datapre)
 
 
       } catch (error) {

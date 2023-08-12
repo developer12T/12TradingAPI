@@ -9,15 +9,16 @@ const { orderMovement } = require('../model/Ordermovement');
 const { Customer } = require('../model/Customer');
 const { sequelize } = require('../config/database');
 require('dotenv').config();
-// const fs = require('fs') ;
-// const os = require('os');
 
 require('moment/locale/th');
 
 getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
+
     const action = req.body.action
-    const action2 = req.body.action
+    const action2 = req.body.action2
+
     try {
+        
     if(action2 == 'moveorder'){
 
           const data = await Order.findAll({
@@ -80,9 +81,10 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
               }
           }
   
-          res.status(200).json(data);
+          res.status(200).json(data) ;
 
     }else{
+
         const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getOrderErp',{ },{});
         const listid =  response.data
 

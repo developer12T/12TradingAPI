@@ -48,6 +48,14 @@ async function receiptSuccessTab(res) {
                 totalprice: item.totalprice
             }));
     
+            if(data[i].statusprintinv === 'TaxInvoice'){
+                var taxInStatus = 'ขอใบกำกับภาษี' 
+
+            }else{
+                var taxInStatus = '' 
+            }
+
+
             const order = {
                 id: data[i].id,
                 // saleschannel: data[i].saleschannel,
@@ -71,6 +79,7 @@ async function receiptSuccessTab(res) {
                 createdatetime:data[i].createdatetime,
                 statusprint: data[i].statusprint,
                 statusprintinv:data[i].statusprintinv,
+                invstatus:taxInStatus,
                 totalprint:data[i].totalprint,
                 saleschannel: data[i].saleschannel,
                 item: items,

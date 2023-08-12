@@ -8,7 +8,10 @@ async function AllOrderTab(res) {
     try {
         const data = await Order.findAll({
             where:{
-                statusprint:'000'
+                statusprint:'000',
+                status:{
+                    [Op.not]:'Voided'
+                }
             }
         });
         const orders = [];
@@ -42,6 +45,13 @@ async function AllOrderTab(res) {
                 totalprice: item.totalprice
             }));
     
+            if(data[i].statusprintinv === 'TaxInvoice'){
+                var taxInStatus = 'ขอใบกำกับภาษี' 
+
+            }else{
+                var taxInStatus = '' 
+            }
+
             const order = {
                 id: data[i].id,
                 // saleschannel: data[i].saleschannel,
@@ -64,6 +74,7 @@ async function AllOrderTab(res) {
                 shippingpostcode: data[i].shippingpostcode,
                 createdatetime:data[i].createdatetime,
                 statusprint: data[i].statusprint,
+                invstatus:taxInStatus,
                 saleschannel: data[i].saleschannel,
                 item: items,
                 customer: cuss,

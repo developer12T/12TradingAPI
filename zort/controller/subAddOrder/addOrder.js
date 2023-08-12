@@ -57,52 +57,52 @@ try {
                 });
    }
 
-   const orderDatup = await Order.findAll({where:{cono:1}})
-        if(orderDatup == null){
-        }else{
-            for(let i=0;i<orderDatup.length;i++){
-              var numberser = await axios.post('http://192.168.2.97:8383/M3API/OrderManage/Order/getNumberSeries',{ 
-               series:'ง',
-               seriestype:'01', 
-               companycode:410,
-               seriesname:'071' 
-              },{});
-               var invser = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/getInvNumber',{ 
-                ordertype:'071'
-              },{});
-              var invm3 = parseInt(invser.data[0].customerordno)
-              const inv12T = await Order.findAll({attributes:['invno'],limit:1,order: [['invno', 'DESC']],})
-            //   console.log(inv12T[0].invno);
-              var inv12tcon = parseInt(inv12T[0].invno)
-              if(invm3 > inv12tcon){
-                var inNo = (parseInt(invser.data[0].customerordno) );
-                var invnumber = inNo+1 ;
-              }else{
-                var inNo = (inv12tcon + 1);
-                var invnumber = inNo ;
-              }
-              if(i == 0){
-                var seNo = (numberser.data[0].lastno+1);  
-              }else{
-                var seNo = (numberser.data[0].lastno+i);  
-              }
-              var lastnumber = seNo ;
-             const updateRun = await Order.update({cono:lastnumber,invno:invnumber},{where:{id:orderDatup[i].id}})
-             var countUpdateorder = i
-           } 
-        }
-        // var updateNumber = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/updateNumberRunning',{ 
-        //     series:'ง',
-        //     seriestype:'01', 
-        //     companycode:410,
-        //     seriesname:'071',
-        //     lastno:numberser.data[0].lastno+countUpdateorder
-        //    }, {});
+  //  const orderDatup = await Order.findAll({where:{cono:1}})
+  //       if(orderDatup == null){
+  //       }else{
+  //           for(let i=0;i<orderDatup.length;i++){
+  //             var numberser = await axios.post('http://192.168.2.97:8383/M3API/OrderManage/Order/getNumberSeries',{ 
+  //              series:'ง',
+  //              seriestype:'01', 
+  //              companycode:410,
+  //              seriesname:'071' 
+  //             },{});
+  //              var invser = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/getInvNumber',{ 
+  //               ordertype:'071'
+  //             },{});
+  //             var invm3 = parseInt(invser.data[0].customerordno)
+  //             const inv12T = await Order.findAll({attributes:['invno'],limit:1,order: [['invno', 'DESC']],})
+  //           //   console.log(inv12T[0].invno);
+  //             var inv12tcon = parseInt(inv12T[0].invno)
+  //             if(invm3 > inv12tcon){
+  //               var inNo = (parseInt(invser.data[0].customerordno) );
+  //               var invnumber = inNo+1 ;
+  //             }else{
+  //               var inNo = (inv12tcon + 1);
+  //               var invnumber = inNo ;
+  //             }
+  //             if(i == 0){
+  //               var seNo = (numberser.data[0].lastno+1);  
+  //             }else{
+  //               var seNo = (numberser.data[0].lastno+i);  
+  //             }
+  //             var lastnumber = seNo ;
+  //            const updateRun = await Order.update({cono:lastnumber,invno:invnumber},{where:{id:orderDatup[i].id}})
+  //            var countUpdateorder = i
+  //          } 
+  //       }
+  //       var updateNumber = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/updateNumberRunning',{ 
+  //           series:'ง',
+  //           seriestype:'01', 
+  //           companycode:410,
+  //           seriesname:'071',
+  //           lastno:numberser.data[0].lastno+countUpdateorder
+  //          }, {});
 
 
 
 
-    res.json(lastnumber)
+    res.json('lastnumber')
     
 } catch (error) {
     console.log(error)

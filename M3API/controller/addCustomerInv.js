@@ -32,9 +32,6 @@ addCustomerInv.post('/getCustomerInv', async (req, res) => {
           console.log(error)
           res.json('Invalid data')
         }
-   
-
-
 }),
 
 addCustomerInv.post('/addCustomerInvToERP', async (req, res) => {
