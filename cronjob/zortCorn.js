@@ -6,8 +6,8 @@ async function zortCronFunc() {
       process.env.TOKEN_KEY,
       { expiresIn: '2h' }) 
 
-    const response = await axios.post(process.env.API_URL+'/zort/order/OrderManage/addOrder',{ token:token },{});
-    // console.log('My cron job is running!');
+    const response = await axios.post(process.env.API_URL+'/zort/order/OrderManage/addOrderBydate',{ token:token },{});
+    console.log(response);
   }
   
   module.exports = zortCronFunc;

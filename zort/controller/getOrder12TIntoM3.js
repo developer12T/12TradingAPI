@@ -133,7 +133,6 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
               })
       
               const cuss = cusdata[0].customername;
-  
               const cuscode = cusdata[0].customercode
               // console.log(itemData);
       
