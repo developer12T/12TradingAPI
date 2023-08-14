@@ -11,6 +11,7 @@ const { Order, OrderDetail,OrderHis } = require('../model/Order') ;
 const { Customer,ShippingAddress } = require('../model/Customer') ;
 const { orderMovement } = require('../model/Ordermovement') ;
 const { Product } = require('../model/Product')
+const { logTable } = require('../model/Logtable')
 
 const { sequelize } = require('../config/database');
 require('moment/locale/th');
@@ -100,20 +101,26 @@ addOrder.put('/addOrderBydate', async (req, res) => {
                 //11.1 ส่งข้อมูลไปทีละ order เพื่อ Insert
                 const addOrder = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/addOrderNew?token=${token}`,{dataOrder:addOrderData },{});
 
+                await logTable.create({number:addOrderData.number,action:'add Complete',createdAt:currentDate})
+
                  //11.2 ส่งข้อมูลไปทีละ orderDetail เพื่อ Insert
                 const addOrderDetail = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/addDeatail?token=${token}`,{dataOrder:addOrderData },{});
+
+                await logTable.update({action1:`add detail complete ${addOrderData.id}`},{where:{number:addOrderData.number}})
 
                 //11.3 ส่งข้อมูลไปทีละออเดอ เพื่อ Insert
                 const addCustomer = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/addCustomer?token=${token}`,{dataOrder:addOrderData},{});
 
-                //11.4 เมื่อ Insert ทุดอย่างแล้ว จะทำการตัดสต็อก
+                await logTable.update({action2:`add customer complete ${addOrderData.customercode} : cusid ${addOrderData.customerid}`},{where:{number:addOrderData.number}})
+                //11.4 เมื่อ Insert ทุกอย่างแล้ว จะทำการตัดสต็อก
                 const cutStock = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/cusStock?token=${token}`,{},{});
 
+                await logTable.update({action3:`cus Stock complete ${addOrderData.id}`},{where:{number:addOrderData.number}})
                 // console.log(addCustomer.data);
               }
 
               // const updateStatusOrder = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/updateStatusOrder?token=${token}`,{},{});
-              res.json({log:'Add Complete'})
+              res.json({log:'Add Complete',newOrder:data2.length})
             }else{
               res.json({log:'no orderNew'})
             }

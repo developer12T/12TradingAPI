@@ -7,10 +7,12 @@ const axios = require('axios')
 const { Order,OrderDetail,OrderHis,OrderDetailHis } = require('../model/Order');
 const { orderMovement } = require('../model/Ordermovement');
 const { Customer } = require('../model/Customer');
+const { logTable } = require('../model/Logtable')
 const { sequelize } = require('../config/database');
 require('dotenv').config();
 
 require('moment/locale/th');
+const currentDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm');
 
 getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
 
@@ -77,6 +79,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                   await Order.destroy({ where: {id:data[i].id} });
                   await OrderDetail.destroy({ where: {id:data[i].id} });
                   await orderMovement.destroy({ where: {id:data[i].id} })
+                  await logTable.create({number:data[i].number,action:`Insert Into M3 complete}`,createdAt:currentDate})
                  
               }
           }
@@ -85,7 +88,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
 
     }else{
 
-        const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getOrderErp',{ },{});
+        const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/getOrderErp',{},{});
         const listid =  response.data
 
           const data4 = await Order.findAll({

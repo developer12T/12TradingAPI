@@ -3,8 +3,12 @@ const getDataPrintReceipt = express.Router();
 const { Op } = require('sequelize');
 const { Order,OrderDetail } = require('../model/Order')
 const { Customer, ShippingAddress } = require('../model/Customer')
+const { logTable } = require('../model/Logtable')
 const sequelize = require('sequelize')
 const axios = require('axios')
+const moment = require('moment');
+require('moment/locale/th');
+const currentDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm');
 getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
       
     try {
@@ -46,6 +50,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
                 var lastnumber = seNo ;
                 console.log(lastnumber)
                const updateRun = await Order.update({cono:lastnumber,invno:invnumber},{where:{id:orderDatup[i].id}})
+               await logTable.create({number:orderDatup[i].number,action:`run Inv : ${invnumber}`,action1:`run Co : ${lastnumber}`,createdAt:currentDate})
                countUpdateorder =  i
              } 
           }
@@ -65,6 +70,8 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
               seriesname:'071',
               lastno:numberser2.data[0].lastno+countUpdateorder+1
              }, {});
+
+
              res.json('success')
         }else{
 
