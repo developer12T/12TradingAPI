@@ -121,8 +121,6 @@ try {
     }
     const updateMovment = await orderMovement.update({statusStock:1},{where:{id:orderId.id}})
    
-    
-    
    }
 
    res.json(cutter)
