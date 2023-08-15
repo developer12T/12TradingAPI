@@ -69,6 +69,7 @@ const Order = sequelize.define('order', {
 const  OrderDetail = sequelize.define('orderDetail', {
   auto_id: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,autoIncrement: true},
   id: { type: DataTypes.INTEGER,allowNull: true,},
+  numberOrder: { type: DataTypes.STRING,allowNull: true,},
   productid: { type: DataTypes.INTEGER,allowNull: true,},
   sku: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   name: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
@@ -162,6 +163,7 @@ const OrderHis = sequelize.define('orderSuccessInsM3', {
 const  OrderDetailHis = sequelize.define('orderDetailSuccessInsM3', {
   auto_id: { type: DataTypes.INTEGER,allowNull: false,primaryKey: true,autoIncrement: true},
   id: { type: DataTypes.INTEGER,allowNull: true,},
+  numberOrder: { type: DataTypes.STRING,allowNull: true,},
   productid: { type: DataTypes.INTEGER,allowNull: true,},
   sku: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},
   name: {type: DataTypes.STRING,collate: 'Thai_CI_AS',allowNull: true,},

@@ -6,10 +6,10 @@ const zortCronFunc = require('./zortCorn');
 
 
 let count = 0;
-cron.schedule('*/1 * * * * *',async () => {
+cron.schedule('*/1 * * * *',async () => {
     const startTime = new Date();
     count++;
-  await  zortCronFunc();
+    zortCronFunc();
   const endTime = new Date();
   const elapsedTime = (endTime - startTime) / 1000; // เวลาในหน่วยวินาที
 

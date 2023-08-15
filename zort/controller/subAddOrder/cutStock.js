@@ -11,122 +11,122 @@ const cusStock = express.Router();
 const { Order, OrderDetail,OrderHis } = require('../../model/Order') ;
 const { Customer,ShippingAddress } = require('../../model/Customer') ;
 const { orderMovement } = require('../../model/Ordermovement') ;
-const { Product } = require('../../model/Product')
+const { Product } = require('../../model/Product');
+const { log } = require('console');
 
 require('moment/locale/th');
 const currentDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm');
 
 cusStock.post('/cusStock', async (req, res) => {
+  const headers = {
+    storename: process.env.zortstorename,
+    apikey:  process.env.zortapikey,
+    apisecret:  process.env.zortapisecret,
+};
 try {
+  const cutter = [] 
+  const bodycut = [] 
+   const orderMoment = await orderMovement.findAll({where:{statusStock:'0'}})
+   for(const orderId of orderMoment ){
+    const item = await OrderDetail.findAll({attributes:['sku','number'],where:{id:orderId.id,sku:{
+      [Op.not]:['DISONLINE_PCS','ZNS1401001_JOB']
+    }}})
+    for(const listofdetail of item){
+      // console.log(listofdetail.sku+' : '+listofdetail.number);
+
+      const itcode = listofdetail.sku
+      var itcodeOnly = itcode.split('_')[0];
+      var itskuOnly = itcode.split('_')[1];
  
-    const orderMoment = await orderMovement.findAll({where:{statusStock:'0'}})
-    for(const list of orderMoment ){
-      const detail = await OrderDetail.findAll({attributes:['sku','number'],where:{id:list.id}})
-      for(const listofdetail of detail){
-   
-        const ctstock5 = await Product.findAll({
-          attributes:['sku','stock'],
-          where:{
-            sku:listofdetail.sku
-          }
-        })
-        for(const ctstock of ctstock5){
-          const itcode = ctstock.sku
-        var itcodeOnly = itcode.split('_')[0];
-      
-        const response = await axios.post(process.env.API_URL+'/M3API/ItemManage/Item/getItemConvert',{ itemcode:itcodeOnly }, {
-                headers: {
-                },
-              });
-                const restdata = response.data ;
-                const ctstock2 = await Product.findAll({
-                  attributes:['sku','stock'],
-                  where:{
-                    sku:{
-                      [Op.like]: `%${itcodeOnly}%`
-                  }}
-                })
-
-              for(const fstock of ctstock2){
-               
-                var fstockSku = fstock.sku 
-                var itsku = fstockSku.split('_')[1] ;
-              
-               const restIns = restdata[0].type
-                for(const restSku of restIns){
-                 
-                    if(itsku == restSku.unit){
-                     
-                      var itskulist = listofdetail.sku.split('_')[1] ; //pcs is not
-                      if(itskulist == restSku.unit){
-                        var cut_stock = (listofdetail.number * restSku.factor)
-                      }
-                    const pcsUnit = (restSku.factor * fstock.stock)
-                      const qtysTOCK =  isNaN((pcsUnit - cut_stock) / restSku.factor) ? 0 : Math.max(0, Math.floor((pcsUnit - cut_stock) / restSku.factor));
-                      const updateStock = await Product.update({stock:qtysTOCK},{where:{sku:fstock.sku}})
-                       const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
-
-                      var stocks = [
-                        {
-                          "sku": fstock.sku,
-                          "stock": qtysTOCK,
-                        //   "cost": 999
-                        }
-                      ]
-
-                    //   const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
-                    //     headers: headers,
-                    //   });
-
-                    //   const responseStock =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductStockList?warehousecode=W0001', {stocks}, {
-                    //     headers: headers,
-                    //   });
-                     
-                    }else if((itsku == 'PCS')||(itsku == 'BOT')||(itsku == 'Free')){
-                        if((itskulist != 'PCS')||(itskulist != 'BOT')||(itskulist != 'Free')){
-                          var cut_stock = (listofdetail.number * restSku.factor)
-                        }else{
-                          var cut_stock = listofdetail.number
-                        }
-                       
-                        const pcsUnit = (fstock.stock)
-                       
-                        const qtysTOCK =  Math.max(0, Math.floor(pcsUnit - cut_stock));
-                     
-                       const updateStock = await Product.update({stock:qtysTOCK},{where:{sku:fstock.sku}})
-                       const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
-
-                       var stocks = [
-                        {
-                          "sku": fstock.sku,
-                          "stock": qtysTOCK,
-                        //   "cost": 999
-                        }
-                      ]
-
-                    //   const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
-                    //     headers: headers,
-                    //   });
-
-                    //   const responseStock =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductStockList?warehousecode=W0001', {stocks}, {
-                    //     headers: headers,
-                    //   });
-
-                    }
-                }
-               
-              }
-      
-       
-        // const updateStock = await Product.update({stock:stockIns},{where:{sku:listofdetail.sku}})
-        // const updateMovment = await orderMovement.update({statusStock:1},{where:{id:list.id}})
+      //1. ทำตัวที่ตัด ให้ เป็น หน่วยย่อยที่สุด
+      const response = await axios.post(process.env.API_URL+'/M3API/ItemManage/Item/getItemConvertItemcode',{ itcode:itcodeOnly }, {});
+      const restdata = response.data[0].type ;
+      for(const typecon of restdata){
+        if(typecon.unit === itskuOnly ){
+          const cuuters = typecon.factor * listofdetail.number
+          cutter.push(cuuters)
+        }else if(itskuOnly === 'PCS' || itcodeOnly === 'BOT'){
+          var pcsUnit = listofdetail.availablestock
+          var facto = 1
+          const cuuters = listofdetail.number
+          cutter.push(cuuters)
         }
-        
       }
-    }
 
-    res.json('success')
+      //2. เอา item ที่จะถูกต้องใน stock มา convert ให้เป็น pcs
+      const stock12T = await Product.findAll({
+        attributes:['sku','availablestock'],
+        where:{
+          sku:{
+            [Op.like]:`%${itcodeOnly}%`
+          }
+        }
+      })
+
+      for(const converType of stock12T ){
+
+        const response = await axios.post(process.env.API_URL+'/M3API/ItemManage/Item/getItemConvertItemcode',{ itcode:itcodeOnly }, {});
+        const restdata = response.data[0].type ;
+        var itskuOnly = converType.sku.split('_')[1];
+        for(const typecon of restdata){
+          if(typecon.unit === itskuOnly ){
+            var pcsUnit = typecon.factor * converType.availablestock
+            var facto =typecon.factor
+            // cutter.push(cuuters)
+          }else if(itskuOnly === 'PCS' || itcodeOnly === 'BOT'){
+            var pcsUnit = converType.availablestock
+            var facto = 1
+          }
+       }
+
+        const datacon = {
+          sku:converType.sku,
+          stock:converType.availablestock,
+          pcsUnit:pcsUnit,
+          facto:facto
+        }
+        bodycut.push(datacon)
+      }
+
+      for(let i =0;i<bodycut.length;i++){
+
+        // console.log(`${i} :`+bodycut[i].sku);
+        // console.log(`${i} :`+bodycut[i].stock);
+        // console.log(`${i} :`+bodycut[i].pcsUnit);
+        // console.log(`${i} :`+bodycut[i].facto);
+
+        
+         var cut =bodycut[i].pcsUnit - cutter[0]
+         var stocklast = cut / bodycut[i].facto
+        //  console.log(`${i} : -`+ cutter[0]);
+        //  console.log(`${i} : =`+stocklast);
+
+        const stockTerm =parseInt(stocklast)
+
+        var stocks = [
+                {
+                  "sku": bodycut[i].sku,
+                  "stock": stockTerm,
+                //   "cost": 999
+                }
+              ]
+
+        const updateStock = await Product.update({availablestock:stockTerm},{where:{sku:bodycut[i].sku}})
+        const response =  axios.post('https://open-api.zortout.com/v4/Product/UpdateProductAvailableStockList?warehousecode=W0001', {stocks}, {
+                        headers: headers,
+                      });
+      }
+      bodycut.splice(0, bodycut.length);
+      cutter.splice(0, cutter.length);
+    }
+    const updateMovment = await orderMovement.update({statusStock:1},{where:{id:orderId.id}})
+   
     
+    
+   }
+
+   res.json(cutter)
+
 } catch (error) {
     console.log(error)
     res.json(error)

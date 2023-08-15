@@ -32,6 +32,7 @@ try {
 
       await OrderDetail.create({
         id:data.id,
+        numberOrder:data.number,
         productid:8888888, //disonline
         name:itemDisOnline.data[0].itemname,
         sku:itemDisOnline.data[0].itemcode.trim()+'_PCS',
@@ -48,13 +49,13 @@ try {
         if((data.shippingamount - data.discountamount) == 0){
 
         }else{
-          await OrderDetail.create({id:data.id,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001_JOB',number:1,totalprice:data.shippingamount,pricepernumber:data.shippingamount,unittext:'JOB'})
+          await OrderDetail.create({id:data.id,  numberOrder:data.number,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001_JOB',number:1,totalprice:data.shippingamount,pricepernumber:data.shippingamount,unittext:'JOB'})
         }
       }else if(data.saleschannel == 'Shopee'){
         if(data.shippingamount == 0){
 
         }else{
-          await OrderDetail.create({id:data.id,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001_JOB',number:1,totalprice:data.shippingamount,pricepernumber:data.shippingamount,unittext:'JOB'})
+          await OrderDetail.create({id:data.id,  numberOrder:data.number,productid:9999999,name:'ค่าขนส่ง',sku:'ZNS1401001_JOB',number:1,totalprice:data.shippingamount,pricepernumber:data.shippingamount,unittext:'JOB'})
         }
       }
     
@@ -62,6 +63,7 @@ try {
       // console.log(data.id) 
       const { auto_id, ...orderDatadetail } = list ; 
       orderDatadetail.id = data.id ;
+      orderDatadetail.numberOrder = data.number
   
       await OrderDetail.bulkCreate([orderDatadetail])
 

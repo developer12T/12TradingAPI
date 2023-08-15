@@ -59,10 +59,19 @@ addOrder.put('/addOrderBydate', async (req, res) => {
         //4. กรองข้อมูล ที่มี id ใน orderhis อยู่แล้วออก
           const existingIds = (await OrderHis.findAll()).map(item => item.id);
           const newDataList = updatedData.filter(item => !existingIds.includes(item.id));
+
+          const existingNumbers = (await OrderHis.findAll()).map(item => item.number);
+          const newDataListOutNumber = newDataList.filter(item => !existingNumbers.includes(item.number));
         
         //5. กรองข้อมูล ที่มี id ใน order อยู่แล้วออก
+          // const existingIdsOrder = (await Order.findAll()).map(item => item.id);
+          // const newDataListOrder = newDataList.filter(item => !existingIdsOrder.includes(item.id));
+          
           const existingIdsOrder = (await Order.findAll()).map(item => item.id);
-          const newDataListOrder = newDataList.filter(item => !existingIdsOrder.includes(item.id));
+          const newDataListOrderOutid = newDataListOutNumber.filter(item => !existingIdsOrder.includes(item.id));
+          
+          const existingNumbersOrder = (await Order.findAll()).map(item => item.number);
+          const newDataListOrder = newDataListOrderOutid.filter(item => !existingNumbersOrder.includes(item.number));
           
         //6.ตัวแปรที่จะมาเก็บ ออเดอที่ไม่มี customercode 
           const orderTaxShopee = [] ;
@@ -96,7 +105,7 @@ addOrder.put('/addOrderBydate', async (req, res) => {
           const data2 = filteredDataList;
 
             if(data2.length > 0){
-        //11. ถ้ามีออเดอใหม่เข้ามา ให้ insert order และ orderDetail ของ order นั้น
+        //11. ถ้ามีออเดอใหม่เข้ามา ให้ insert order และ orderDetail ของ order นั้น 
               for(const addOrderData of data2){
                 //11.1 ส่งข้อมูลไปทีละ order เพื่อ Insert
                 const addOrder = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/addOrderNew?token=${token}`,{dataOrder:addOrderData },{});
@@ -125,7 +134,7 @@ addOrder.put('/addOrderBydate', async (req, res) => {
               res.json({log:'no orderNew'})
             }
 
-        // res.json(datapre)
+        // res.json(filteredDataList)
 
 
       } catch (error) {
@@ -134,5 +143,80 @@ addOrder.put('/addOrderBydate', async (req, res) => {
       } 
 
   });  
+
+addOrder.put('/updateOrderId', async (req, res) => {
+    const headers = {
+      storename: process.env.zortstorename,
+      apikey:  process.env.zortapikey,
+      apisecret:  process.env.zortapisecret,
+  };
+    try {
+      
+      // // const data = await Order.findAll({attributes:['number']})
+      const token = jwt.sign({ username: 'systemm3' },process.env.TOKEN_KEY,{ expiresIn: '2h' }) 
+      // // for(let i = 0;i<data.length;i++){
+        const response = await axios.get(process.env.zortapiopenurlOrder+'?Orderdateafter=2023-08-04&status=0,1,3', {
+          // const response = await axios.get('https://open-api.zortout.com/v4/Order/GetOrderDetail?id=116364876', {
+              headers: {
+                storename: process.env.zortstorename,
+                apikey: process.env.zortapikey,
+                apisecret: process.env.zortapisecret,
+                numberlist:`${req.body.number}`
+              },
+            });
+
+
+      //        const addOrderData = response.data.list[0]
+      //       const addOrderDetail = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/addDeatail?token=${token}`,{dataOrder:addOrderData },{});
+
+            // for(let i = 0 ; i<response.data.list.length;i++){
+            //   const item = response.data.list[i]
+            //   for(let i=0;i<item.length;i++){
+            //     console.log(item.list[i]);
+            //   }
+            // console.log(addOrderData);
+              // const addOrderData = response.data.list[0]
+              // const addCustomer = await  axios.post(process.env.API_URL+`/zort/order/OrderManage/addCustomer?token=${token}`,{dataOrder:addOrderData},{});
+
+              // await Order.update({customerid:response.data.list[i].customerid},{where:{number:response.data.list[i].number}})
+
+            //   await Customer.findOrCreate({
+            //     where: {
+            //         customerid:response.data.list[i].customerid
+            //     },
+            //     defaults: {
+            //       customerid:response.data.list[i].customerid,
+            //       customername:response.data.list[i].customername,
+            //       customercode:response.data.list[i].customercode,
+            //       customeridnumber:response.data.list[i].customeridnumber,
+            //       customeremail:response.data.list[i].customeremail,
+            //       customerphone:response.data.list[i].customerphone,
+            //       customeraddress:response.data.list[i].customeraddress,
+            //       customerpostcode:response.data.list[i].customerpostcode,
+            //       customerprovince:response.data.list[i].customerprovince,
+            //       customerdistrict:response.data.list[i].customerdistrict,
+            //       customersubdistrict:response.data.list[i].customersubdistrict,
+            //       customerstreetAddress:response.data.list[i].customerstreetAddress,
+            //       customerbranchname:response.data.list[i].customerbranchname,
+            //       customerbranchno:response.data.list[i].customerbranchno,
+            //       facebookname:response.data.list[i].facebookname,
+            //       facebookid:response.data.list[i].facebookid,
+            //       line:response.data.list[i].line,
+            //       lineid:response.data.list[i].lineid,
+            //     }
+            // });
+
+
+              // await Order.update({id:response.data.list[i].id},{where:{number:response.data.list[i].number}});
+              // console.log(response.data.list[i].id+':'+response.data.list[i].number);
+            // }
+       
+      // } 
+      res.json(response)
+      // res.json('written')
+    } catch (error) {
+      
+    }
+  })
 
 module.exports = addOrder;    
