@@ -6,7 +6,7 @@ const zortCronFunc = require('./zortCorn');
 
 
 let count = 0;
-cron.schedule('*/1 * * * *',async () => {
+cron.schedule('*/5 * * * *',async () => {
     const startTime = new Date();
     count++;
     zortCronFunc();

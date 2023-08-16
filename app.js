@@ -35,6 +35,6 @@ app.use('/12Trading',loginToken)
 app.use('/12Trading',loginTokenAnt) 
 app.use('/12Trading',devLoginToken)
 
-// require('./cronjob/main');
+require('./cronjob/main');
 
 module.exports = app
