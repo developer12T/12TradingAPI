@@ -41,7 +41,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
   
                   const dataOrder = await Order.findAll({where:{id:data[i].id}}) 
                 
-                      await OrderHis.create(order.dataValues); 
+                      await OrderHis.create(dataOrder.dataValues); 
                   
                 const dataDetailOrder = await OrderDetail.findAll({
                     attributes: { exclude: ['auto_id'] },
