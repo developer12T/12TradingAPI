@@ -46,11 +46,9 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                     INSERT INTO [dbo].[orderSuccessInsM3] (id,[ordertype],[number],[customerid],[warehousecode],[status],[paymentstatus],[marketplacename],[marketplaceshippingstatus],[marketplacepayment],[amount],[vatamount] ,[shippingvat],[shippingchannel],
                     [shippingamount],[shippingdate],[shippingdateString],[shippingname],[shippingaddress] ,[shippingphone] ,[shippingemail],[shippingpostcode],[shippingprovince],[shippingdistrict] ,[shippingsubdistrict],[shippingstreetAddress],
                     [orderdate],[orderdateString],[paymentamount],[description],[discount],[platformdiscount],[sellerdiscount],[shippingdiscount],[discountamount],[voucheramount],[vattype],[saleschannel],[vatpercent],[isCOD],[createdatetime],
-                    [createdatetimeString],[updatedatetime],[updatedatetimeString],[expiredate],[expiredateString],[receivedate],[receivedateString],[totalproductamount],[uniquenumber],[properties],[isDeposit],[statusprint],[statusprintINV],[statusPrininvSuccess],[cono],[invno],[customeriderp]) 
+                    [createdatetimeString],[updatedatetime],[updatedatetimeString],[expiredate],[expiredateString],[receivedate],[receivedateString],[totalproductamount],[uniquenumber],[properties],[isDeposit],[statusprint],[statusprintINV],[statusPrininvSuccess],[cono],[invno]) 
                     VALUES (:value1,:value2,:value3,:value4,:value5,:value6,:value7,:value8,:value9,:value10,:value11,:value12,:value13,:value14,:value15,:value16,:value17,:value18,:value19,:value20,:value21,:value22,:value23,:value24,:value25,
-                    :value26,:value27,:value28,:value29,:value30,:value31,:value32,:value33,:value34,:value35,:value36,:value37,:value38,:value39,:value40,:value41,:value42,:value43,:value44,:value45,:value46,:value47,:value48,:value49,:value50,:value51,:value52,:value53,:value54,:value55,:value56,:value57,:value58)
-                    
-                    INSERT INTO [dbo].[orderMovement] (id, statusStock) VALUES (:value1, 0) 
+                    :value26,:value27,:value28,:value29,:value30,:value31,:value32,:value33,:value34,:value35,:value36,:value37,:value38,:value39,:value40,:value41,:value42,:value43,:value44,:value45,:value46,:value47,:value48,:value49,:value50,:value51,:value52,:value53,:value54,:value55,:value56,:value57)
                     `;
 
                     const replacements = { 
@@ -61,7 +59,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                         value5: data2.warehousecode,             value15: data2.shippingamount,     value25: data2.shippingsubdistrict,  value35: data2.discountamount,   value45: data2.expiredate,           value55:'000',
                         value6: data2.status,                    value16: data2.shippingdate,       value26: data2.shippingstreetAddress,value36: data2.voucheramount,    value46: data2.expiredateString,     value56:1,
                         value7: data2.paymentstatus,             value17: data2.shippingdateString, value27: data2.orderdate,            value37: data2.vattype,          value47: data2.receivedate,          value57:1,
-                        value8: data2.marketplacename,           value18: data2.shippingname,       value28: data2.orderdateString,      value38: data2.saleschannel,     value48: data2.receivedateString,    value58:data2.customercode,
+                        value8: data2.marketplacename,           value18: data2.shippingname,       value28: data2.orderdateString,      value38: data2.saleschannel,     value48: data2.receivedateString,    
                         value9: data2.marketplaceshippingstatus, value19: data2.shippingaddress,    value29: data2.paymentamount,        value39: data2.vatpercent,       value49: data2.totalproductamount, 
                         value10: data2.marketplacepayment,       value20: data2.shippingphone,      value30: data2.description,          value40: data2.isCOD,            value50: data2.uniquenumber, 
                     }
