@@ -23,11 +23,11 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
         
     if(action2 == 'moveorder'){
 
-          const data = await Order.findAll({
+          const data2 = await Order.findAll({
               where: {
                   [Op.or]: [
                       {   statusPrininvSuccess: '001' },
-                      {   statusPrininvSuccess: '002' },
+                      {   statusPrininvSuccess: '002' }, 
                       { statusprint: '001' },
                       { statusprint: '002' },
                   ],
@@ -37,52 +37,50 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
               }
           });
           if(action == 'InsertM3'){
-          for (let i = 0; i < data.length; i++) {
+        //   for (let i = 0; i < data.length; i++) {
+          for (const data of data2) {
   
-                  const dataOrder = await Order.findAll({where:{id:data[i].id}}) 
-                  for(const data2 of dataOrder){
+                //   const dataOrder = await Order.findAll({where:{id:data[i].id}}) 
 
-                    const query = `
-                    INSERT INTO [dbo].[orderSuccessInsM3] (id,[ordertype],[number],[customerid],[warehousecode],[status],[paymentstatus],[marketplacename],[marketplaceshippingstatus],[marketplacepayment],[amount],[vatamount] ,[shippingvat],[shippingchannel],
-                    [shippingamount],[shippingdate],[shippingdateString],[shippingname],[shippingaddress] ,[shippingphone] ,[shippingemail],[shippingpostcode],[shippingprovince],[shippingdistrict] ,[shippingsubdistrict],[shippingstreetAddress],
-                    [orderdate],[orderdateString],[paymentamount],[description],[discount],[platformdiscount],[sellerdiscount],[shippingdiscount],[discountamount],[voucheramount],[vattype],[saleschannel],[vatpercent],[isCOD],[createdatetime],
-                    [createdatetimeString],[updatedatetime],[updatedatetimeString],[expiredate],[expiredateString],[receivedate],[receivedateString],[totalproductamount],[uniquenumber],[properties],[isDeposit],[statusprint],[statusprintINV],[statusPrininvSuccess],[cono],[invno]) 
-                    VALUES (:value1,:value2,:value3,:value4,:value5,:value6,:value7,:value8,:value9,:value10,:value11,:value12,:value13,:value14,:value15,:value16,:value17,:value18,:value19,:value20,:value21,:value22,:value23,:value24,:value25,
-                    :value26,:value27,:value28,:value29,:value30,:value31,:value32,:value33,:value34,:value35,:value36,:value37,:value38,:value39,:value40,:value41,:value42,:value43,:value44,:value45,:value46,:value47,:value48,:value49,:value50,:value51,:value52,:value53,:value54,:value55,:value56,:value57)
-                    `;
+                  const query = `
+    INSERT INTO [dbo].[orderSuccessInsM3] (id,[ordertype],[number],[customerid],[warehousecode],[status],[paymentstatus],[marketplacename],[marketplaceshippingstatus],[marketplacepayment],[amount],[vatamount] ,[shippingvat],[shippingchannel],
+    [shippingamount],[shippingdate],[shippingdateString],[shippingname],[shippingaddress] ,[shippingphone] ,[shippingemail],[shippingpostcode],[shippingprovince],[shippingdistrict] ,[shippingsubdistrict],[shippingstreetAddress],
+    [orderdate],[orderdateString],[paymentamount],[description],[discount],[platformdiscount],[sellerdiscount],[shippingdiscount],[discountamount],[voucheramount],[vattype],[saleschannel],[vatpercent],[isCOD],[createdatetime],
+    [createdatetimeString],[updatedatetime],[updatedatetimeString],[expiredate],[expiredateString],[receivedate],[receivedateString],[totalproductamount],[uniquenumber],[properties],[isDeposit],[statusprint],[statusprintINV],[statusPrininvSuccess],[cono],[invno]) 
+    VALUES (:value1,:value2,:value3,:value4,:value5,:value6,:value7,:value8,:value9,:value10,:value11,:value12,:value13,:value14,:value15,:value16,:value17,:value18,:value19,:value20,:value21,:value22,:value23,:value24,:value25,
+    :value26,:value27,:value28,:value29,:value30,:value31,:value32,:value33,:value34,:value35,:value36,:value37,:value38,:value39,:value40,:value41,:value42,:value43,:value44,:value45,:value46,:value47,:value48,:value49,:value50,:value51,:value52,:value53,:value54,:value55,:value56,:value57)
+    
+    `;
 
-                    const replacements = { 
-                        value1: data2.id,                        value11: data2.amount,             value21: data2.shippingemail,        value31: data2.discount,         value41: data2.createdatetime,       value51: data2.properties,
-                        value2: data2.ordertype,                 value12: data2.vatamount,          value22: data2.shippingpostcode,     value32: data2.platformdiscount, value42: data2.createdatetimeString, value52: data2.isDeposit,
-                        value3: data2.number,                    value13: data2.shippingvat,        value23: data2.shippingprovince,     value33: data2.sellerdiscount,   value43: data2.updatedatetime,       value53: '000',
-                        value4: data2.customerid,                value14: data2.shippingchannel,    value24: data2.shippingdistrict,     value34: data2.shippingdiscount, value44: data2.updatedatetimeString, value54:'',
-                        value5: data2.warehousecode,             value15: data2.shippingamount,     value25: data2.shippingsubdistrict,  value35: data2.discountamount,   value45: data2.expiredate,           value55:'000',
-                        value6: data2.status,                    value16: data2.shippingdate,       value26: data2.shippingstreetAddress,value36: data2.voucheramount,    value46: data2.expiredateString,     value56:1,
-                        value7: data2.paymentstatus,             value17: data2.shippingdateString, value27: data2.orderdate,            value37: data2.vattype,          value47: data2.receivedate,          value57:1,
-                        value8: data2.marketplacename,           value18: data2.shippingname,       value28: data2.orderdateString,      value38: data2.saleschannel,     value48: data2.receivedateString,    
-                        value9: data2.marketplaceshippingstatus, value19: data2.shippingaddress,    value29: data2.paymentamount,        value39: data2.vatpercent,       value49: data2.totalproductamount, 
-                        value10: data2.marketplacepayment,       value20: data2.shippingphone,      value30: data2.description,          value40: data2.isCOD,            value50: data2.uniquenumber, 
-                    }
-                    const result = await sequelize.query(query, {
-                        replacements,
-                        type: sequelize.QueryTypes.INSERT
-                    }); 
+    const replacements = { 
+        value1: data.id,                        value11: data.amount,             value21: data.shippingemail,        value31: data.discount,         value41: data.createdatetime,       value51: data.properties,
+        value2: data.ordertype,                 value12: data.vatamount,          value22: data.shippingpostcode,     value32: data.platformdiscount, value42: data.createdatetimeString, value52: data.isDeposit,
+        value3: data.number,                    value13: data.shippingvat,        value23: data.shippingprovince,     value33: data.sellerdiscount,   value43: data.updatedatetime,       value53: data.statusprint,
+        value4: data.customerid,                value14: data.shippingchannel,    value24: data.shippingdistrict,     value34: data.shippingdiscount, value44: data.updatedatetimeString, value54:data.totalprint,
+        value5: data.warehousecode,             value15: data.shippingamount,     value25: data.shippingsubdistrict,  value35: data.discountamount,   value45: data.expiredate,           value55:data.statusPrininvSuccess,
+        value6: data.status,                    value16: data.shippingdate,       value26: data.shippingstreetAddress,value36: data.voucheramount,    value46: data.expiredateString,     value56:data.cono,
+        value7: data.paymentstatus,             value17: data.shippingdateString, value27: data.orderdate,            value37: data.vattype,          value47: data.receivedate,          value57:data.invno,
+        value8: data.marketplacename,           value18: data.shippingname,       value28: data.orderdateString,      value38: data.saleschannel,     value48: data.receivedateString,    
+        value9: data.marketplaceshippingstatus, value19: data.shippingaddress,    value29: data.paymentamount,        value39: data.vatpercent,       value49: data.totalproductamount, 
+        value10: data.marketplacepayment,       value20: data.shippingphone,      value30: data.description,          value40: data.isCOD,            value50: data.uniquenumber, 
+    }
+    const result = await sequelize.query(query, {
+        replacements,
+        type: sequelize.QueryTypes.INSERT
+    }); 
                 
-
-                  }
-
-                  
                     //   await OrderHis.create(dataOrder.dataValues); 
                   
                 const dataDetailOrder = await OrderDetail.findAll({
                     attributes: { exclude: ['auto_id'] },
-                    where: { id: data[i].id }
+                    where: { id: data.id }
                   });
                   
                   for (const orderdetail of dataDetailOrder) {
                     await OrderDetailHis.create({
                             id: orderdetail.id ,
                             productid: orderdetail.productid,
+                            numberOrder:data2.number,
                             sku:orderdetail.sku,
                             name:orderdetail.name,
                             procode:orderdetail.procode,
@@ -106,15 +104,15 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                     });
                   }
                   
-                  await Order.destroy({ where: {id:data[i].id} });
-                  await OrderDetail.destroy({ where: {id:data[i].id} });
-                  await orderMovement.destroy({ where: {id:data[i].id} })
-                  await logTable.create({number:data[i].number,action:`Insert Into M3 complete}`,createdAt:currentDate})
+                  await Order.destroy({ where: {id:data.id} });
+                  await OrderDetail.destroy({ where: {id:data.id} });
+                  await orderMovement.destroy({ where: {id:data.id} })
+                  await logTable.create({number:data.number,action:`Insert Into M3 complete}`,createdAt:currentDate})
                  
               }
           }
   
-          res.status(200).json(data) ;
+          res.status(200).json(data2) ;
 
     }else{
 
