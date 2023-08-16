@@ -42,8 +42,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
   
                   const dataOrder = await Order.findAll({where:{id:data[i].id}}) 
                   for (const order of dataOrder) {
-                    //   await OrderHis.create(order.dataValues); 
-                      await OrderHis.findOrCreate({where:{id:order.id}},{default:order.dataValues}); 
+                      await OrderHis.create(order.dataValues); 
                   }
                   
                 const dataDetailOrder = await OrderDetail.findAll({
@@ -52,31 +51,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                   });
                   
                   for (const orderdetail of dataDetailOrder) {
-                    // await OrderDetailHis.create({
-                    //         id: orderdetail.id ,
-                    //         productid: orderdetail.productid,
-                    //         sku:orderdetail.sku,
-                    //         name:orderdetail.name,
-                    //         procode:orderdetail.procode,
-                    //         number:orderdetail.number,
-                    //         pricepernumber:orderdetail.pricepernumber,
-                    //         discount:orderdetail.discount,
-                    //         discountamount:orderdetail.discountamount,
-                    //         totalprice:orderdetail.totalprice,
-                    //         producttype:orderdetail.producttype,
-                    //         serialnolist:orderdetail.serialnolist,
-                    //         expirylotlist:orderdetail.expirylotlist,
-                    //         skutype:orderdetail.skutype,
-                    //         bundleid:orderdetail.bundleid,
-                    //         bundleitemid:orderdetail.bundleitemid,
-                    //         bundlenumber:orderdetail.bundlenumber,
-                    //         bundleCode:orderdetail.bundleCode,
-                    //         bundleName:orderdetail.bundleName,
-                    //         integrationItemId:orderdetail.integrationItemId,
-                    //         integrationVariantId:orderdetail.integrationVariantId,
-
-                    // }); 
-                    await OrderDetailHis.findOrCreate({where:{id:orderdetail.id}},{default:{
+                    await OrderDetailHis.create({
                             id: orderdetail.id ,
                             productid: orderdetail.productid,
                             sku:orderdetail.sku,
@@ -99,7 +74,7 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                             integrationItemId:orderdetail.integrationItemId,
                             integrationVariantId:orderdetail.integrationVariantId,
 
-                  }});
+                    });
                   }
                   
                   await Order.destroy({ where: {id:data[i].id} });
