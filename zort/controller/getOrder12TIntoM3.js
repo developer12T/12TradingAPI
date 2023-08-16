@@ -36,14 +36,12 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                   }
               }
           });
-     
+          if(action == 'InsertM3'){
           for (let i = 0; i < data.length; i++) {
-              if(action == 'InsertM3'){
   
                   const dataOrder = await Order.findAll({where:{id:data[i].id}}) 
-                  for (const order of dataOrder) {
+                
                       await OrderHis.create(order.dataValues); 
-                  }
                   
                 const dataDetailOrder = await OrderDetail.findAll({
                     attributes: { exclude: ['auto_id'] },
@@ -80,7 +78,6 @@ getOrder12TIntoM3.post('/getOrder12TIntoM3', async (req, res) => {
                   await Order.destroy({ where: {id:data[i].id} });
                   await OrderDetail.destroy({ where: {id:data[i].id} });
                   await orderMovement.destroy({ where: {id:data[i].id} })
-                  
                   await logTable.create({number:data[i].number,action:`Insert Into M3 complete}`,createdAt:currentDate})
                  
               }
