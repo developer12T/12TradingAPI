@@ -87,10 +87,10 @@ async function ReceiptWaitTabPayment(res) {
                 var paymentstatusText = 'พบข้อผิดพลาด'
             }
 
-            if(data[i].isDeposit == '1'){
-                var isDeposit = 'เก็บปลายทาง'
+            if(data[i].isCOD == '1'){
+                var isCOD = 'เก็บปลายทาง'
             }else{
-                var isDeposit = 'ไม่เก็บปลายทาง'
+                var isCOD = 'ไม่เก็บปลายทาง'
             }
 
             const order = {
@@ -123,7 +123,7 @@ async function ReceiptWaitTabPayment(res) {
                 saleschannel: data[i].saleschannel,
                 item: items,
                 customer: cuss,
-                isDeposit:isDeposit
+                isCOD:isCOD
             };
             orders.push(order);
         }
