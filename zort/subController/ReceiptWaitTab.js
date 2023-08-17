@@ -8,7 +8,11 @@ async function receiptWaitTab(res) {
     try {
         const data = await Order.findAll({
             where: {
-                statusprint: '000',
+                [Op.or]:{
+                    statusprint: '000',
+                    statusPrininvSuccess: '000'
+                },
+               
                 status:{
                     [Op.not]:'Voided'
                 },
