@@ -74,6 +74,11 @@ async function AllOrderTab(res) {
                 var paymentstatusText = 'พบข้อผิดพลาด'
             }
 
+            if(data[i].isDeposit == '1'){
+                var isDeposit = 'เก็บปลายทาง'
+            }else{
+                var isDeposit = 'ไม่เก็บปลายทาง'
+            }
 
             const order = {
                 id: data[i].id,
@@ -84,8 +89,10 @@ async function AllOrderTab(res) {
                 orderdateString: data[i].orderdateString,
                 number: data[i].number,
                 customerid: data[i].customerid,
-                status: statusText,
-                paymentstatus:paymentstatusText ,
+                status: data[i].status,
+                statusText:statusText,
+                paymentstatus: data[i].paymentstatus,
+                paymentstatusText:paymentstatusText,
                 amount: data[i].amount,
                 vatamount: data[i].vatamount,
                 shippingchannel: data[i].shippingchannel,
@@ -97,10 +104,13 @@ async function AllOrderTab(res) {
                 shippingpostcode: data[i].shippingpostcode,
                 createdatetime:data[i].createdatetime,
                 statusprint: data[i].statusprint,
+                statusprintinv:data[i].statusprintinv,
                 invstatus:taxInStatus,
+                totalprint:totalprint,
                 saleschannel: data[i].saleschannel,
                 item: items,
                 customer: cuss,
+                isDeposit:isDeposit
             };
             orders.push(order);
         }

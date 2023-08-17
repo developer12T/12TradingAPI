@@ -87,6 +87,12 @@ async function ReceiptWaitTabPayment(res) {
                 var paymentstatusText = 'พบข้อผิดพลาด'
             }
 
+            if(data[i].isDeposit == '1'){
+                var isDeposit = 'เก็บปลายทาง'
+            }else{
+                var isDeposit = 'ไม่เก็บปลายทาง'
+            }
+
             const order = {
                 id: data[i].id,
                 // saleschannel: data[i].saleschannel,
@@ -96,8 +102,10 @@ async function ReceiptWaitTabPayment(res) {
                 orderdateString: data[i].orderdateString,
                 number: data[i].number,
                 customerid: data[i].customerid,
-                status: statusText,
-                paymentstatus: paymentstatusText,
+                status: data[i].status,
+                statusText:statusText,
+                paymentstatus: data[i].paymentstatus,
+                paymentstatusText:paymentstatusText,
                 amount: data[i].amount,
                 vatamount: data[i].vatamount,
                 shippingchannel: data[i].shippingchannel,
@@ -115,6 +123,7 @@ async function ReceiptWaitTabPayment(res) {
                 saleschannel: data[i].saleschannel,
                 item: items,
                 customer: cuss,
+                isDeposit:isDeposit
             };
             orders.push(order);
         }
