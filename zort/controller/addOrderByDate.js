@@ -99,7 +99,7 @@ addOrder.put('/addOrderBydate', async (req, res) => {
           const token = jwt.sign({ username: 'systemm3' },process.env.TOKEN_KEY,{ expiresIn: '2h' }) 
           
         //9. เอาตัวแปรที่ได้จาก 4. มาใช้ เพื่อ ให้ customercode ออเดอ อัพเดตใหม่
-        const response =  axios.put(process.env.API_URL+`/zort/customer/CustomerManage/updateCustomerInv?token=${token}`,{dataOrder:orderTaxShopee },{});
+        const response = await  axios.put(process.env.API_URL+`/zort/customer/CustomerManage/updateCustomerInv?token=${token}`,{dataOrder:orderTaxShopee },{});
 
         //10. กำหนด data2 ให้เท่ากับ order ใหม่
           const data2 = filteredDataList;

@@ -54,7 +54,7 @@ async function receiptWaitTab(res) {
                 var totalprint = 0
             }else{
                 var totalprint =data[i].totalprint
-            }
+            } 
 
             if(data[i].statusprintinv === 'TaxInvoice'){
                 var taxInStatus = 'ขอใบกำกับภาษี' 

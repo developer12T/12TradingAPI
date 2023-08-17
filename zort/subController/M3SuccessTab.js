@@ -40,6 +40,36 @@ async function M3SuccessTab(res) {
                 pricepernumber: item.pricepernumber,
                 totalprice: item.totalprice
             }));
+
+
+            if(data[i].status === 'Success'){
+                var statusText = 'สำเร็จ'
+            }else if(data[i].status === 'Voided'){
+                var statusText = 'ยกเลิก'
+            }else if(data[i].status === 'Waiting'){
+                var statusText = 'รอส่ง'
+            }else if(data[i].status === 'Pending'){
+                var statusText = 'รอโอน'
+            }else{
+                var statusText = 'พบข้อผิดพลาด'
+            }
+
+            if(data[i].paymentstatus === 'Paid'){
+                var paymentstatusText = 'ชำระแล้ว'
+            }else if(data[i].paymentstatus === 'Voided'){
+                var paymentstatusText = 'ยกเลิก'
+            }else if(data[i].paymentstatus === 'Pending'){
+                var paymentstatusText = 'รอชำระ'
+            }else{
+                var paymentstatusText = 'พบข้อผิดพลาด'
+            }
+
+            if(data[i].isCOD == '1'){
+                var isCOD = 'เก็บปลายทาง'
+            }else{
+                var isCOD = 'ไม่เก็บปลายทาง'
+            }
+
     
             const order = {
                 id: data[i].id,
@@ -51,7 +81,9 @@ async function M3SuccessTab(res) {
                 number: data[i].number,
                 customerid: data[i].customerid,
                 status: data[i].status,
+                statusText:statusText,
                 paymentstatus: data[i].paymentstatus,
+                paymentstatusText:paymentstatusText,
                 amount: data[i].amount,
                 vatamount: data[i].vatamount,
                 shippingchannel: data[i].shippingchannel,
@@ -67,6 +99,7 @@ async function M3SuccessTab(res) {
                 saleschannel: data[i].saleschannel,
                 item: items,
                 customer: cuss,
+                isCOD:isCOD
             };
             orders.push(order);
         }
