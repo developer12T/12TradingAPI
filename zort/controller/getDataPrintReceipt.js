@@ -18,7 +18,9 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
 
           const orderDatup = await Order.findAll({where:{cono:1,id:idOrder}})
 
-          if((orderDatup === null) || (orderDatup === undefined) || (orderDatup === '')){
+          // if((orderDatup === null) || (orderDatup === undefined) || (orderDatup === '')){
+          if((orderDatup <= 0)){
+            console.log('empty')
           }else{
             
             var countUpdateorder = 0
@@ -71,8 +73,9 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
                  seriesname:'071',
                  lastno:numberser2.data[0].lastno+countUpdateorder+1
                 }, {});
+            console.log('no emptyp')
           }
-             res.json('success')
+             res.json(orderDatup)
         }else{
 
           const data = await Order.findAll({
