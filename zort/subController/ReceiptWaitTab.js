@@ -8,11 +8,12 @@ async function receiptWaitTab(res) {
     try {
         const data = await Order.findAll({
             where: {
-                    statusprint: '000',
-                    statusPrininvSuccess: '000',
+                statusprint: '000',
+                statusPrininvSuccess: '000',
                 status:{
                     [Op.not]:'Voided'
                 },
+                paymentstatus:'Paid'
                 // cono:1
                 // statusprintinv: {
                 //     [Op.not]: 'TaxInvoice'
@@ -62,6 +63,28 @@ async function receiptWaitTab(res) {
                 var taxInStatus = '' 
             }
 
+            if(data[i].status === 'Success'){
+                var statusText = 'สำเร็จ'
+            }else if(data[i].status === 'Voided'){
+                var statusText = 'ยกเลิก'
+            }else if(data[i].status === 'Waiting'){
+                var statusText = 'รอส่ง'
+            }else if(data[i].status === 'Pending'){
+                var statusText = 'รอโอน'
+            }else{
+                var statusText = 'พบข้อผิดพลาด'
+            }
+
+            if(data[i].paymentstatus === 'Paid'){
+                var paymentstatusText = 'ชำระแล้ว'
+            }else if(data[i].paymentstatus === 'Voided'){
+                var paymentstatusText = 'ยกเลิก'
+            }else if(data[i].paymentstatus === 'Pending'){
+                var paymentstatusText = 'รอชำระ'
+            }else{
+                var paymentstatusText = 'พบข้อผิดพลาด'
+            }
+
             const order = {
                 id: data[i].id,
                 // saleschannel: data[i].saleschannel,
@@ -71,8 +94,8 @@ async function receiptWaitTab(res) {
                 orderdateString: data[i].orderdateString,
                 number: data[i].number,
                 customerid: data[i].customerid,
-                status: data[i].status,
-                paymentstatus: data[i].paymentstatus,
+                status:statusText,
+                paymentstatus: paymentstatusText,
                 amount: data[i].amount,
                 vatamount: data[i].vatamount,
                 shippingchannel: data[i].shippingchannel,

@@ -8,6 +8,7 @@ const invtWaitTab = require('../subController/InvWaitTab');
 const invSuccessTab = require('../subController/InvSuccessTab'); 
 const M3WaitTab = require('../subController/M3WaitTab'); 
 const M3SuccessTab = require('../subController/M3SuccessTab'); 
+const ReceiptWaitTabPayment = require('../subController/ReceiptWaitTabPayment'); 
 const { Order } = require('../model/Order');
 
 getOrder12T.post('/getOrder', async (req, res) => {
@@ -19,6 +20,8 @@ getOrder12T.post('/getOrder', async (req, res) => {
                 receiptWaitTab(res).then(orders => {res.json(orders); })
             } else if (tab == 'success-tab') {
                 receiptSuccessTab(res).then(orders => {res.json(orders); })
+            } else if(tab == 'payment-tab'){
+                ReceiptWaitTabPayment(res).then(orders => {res.json(orders)})
             }
         } else if (page == 'all') {
                 AllOrderTab(res).then(orders => {res.json(orders); })

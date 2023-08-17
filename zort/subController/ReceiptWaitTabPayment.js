@@ -1,40 +1,47 @@
 const express = require('express');
-// const getOrder = express.Router();
+const getOrder = express.Router();
 const { Op } = require('sequelize');
 const { Order,OrderDetail } = require('../model/Order');
 const { Customer } = require('../model/Customer');
 
-async function AllOrderTab(res) {
+async function ReceiptWaitTabPayment(res) {
     try {
         const data = await Order.findAll({
-            where:{
-                statusprint:'000',
+            where: {
+                    statusprint: '000',
+                    statusPrininvSuccess: '000',
                 status:{
                     [Op.not]:'Voided'
+                },
+                paymentstatus:{
+                    [Op.not]:'Paid'
                 }
+                // cono:1
+                // statusprintinv: {
+                //     [Op.not]: 'TaxInvoice'
+                // }
+    
             }
         });
         const orders = [];
-        for (let i = 0; i < data.length; i++) {
     
+        for (let i = 0; i < data.length; i++) {
             const itemData = await OrderDetail.findAll({
                 attributes: ['productid', 'sku', 'name', 'number', 'pricepernumber', 'totalprice'],
                 where: {
-                    id: data[i].id,
-                   
+                    id: data[i].id
                 }
             });
     
             const cusdata = await Customer.findAll({
-                attributes: ['customername'],
+                attributes: ['customername','customerid'],
                 where: {
                     customerid: data[i].customerid
                 }
             })
     
-            // const cuss = cusdata[0];
+            // const cuss = cusdata[0].customername;
             const cuss = cusdata[0]?.customername || '';
-
             const items = itemData.map(item => ({
                 productid: item.productid,
                 sku: item.sku.split('_')[0],
@@ -45,13 +52,19 @@ async function AllOrderTab(res) {
                 totalprice: item.totalprice
             }));
     
+            if(data[i].totalprint == null){
+                var totalprint = 0
+            }else{
+                var totalprint =data[i].totalprint
+            }
+
             if(data[i].statusprintinv === 'TaxInvoice'){
                 var taxInStatus = 'ขอใบกำกับภาษี' 
 
             }else{
                 var taxInStatus = '' 
             }
-            
+
             if(data[i].status === 'Success'){
                 var statusText = 'สำเร็จ'
             }else if(data[i].status === 'Voided'){
@@ -74,7 +87,6 @@ async function AllOrderTab(res) {
                 var paymentstatusText = 'พบข้อผิดพลาด'
             }
 
-
             const order = {
                 id: data[i].id,
                 // saleschannel: data[i].saleschannel,
@@ -85,7 +97,7 @@ async function AllOrderTab(res) {
                 number: data[i].number,
                 customerid: data[i].customerid,
                 status: statusText,
-                paymentstatus:paymentstatusText ,
+                paymentstatus: paymentstatusText,
                 amount: data[i].amount,
                 vatamount: data[i].vatamount,
                 shippingchannel: data[i].shippingchannel,
@@ -97,20 +109,20 @@ async function AllOrderTab(res) {
                 shippingpostcode: data[i].shippingpostcode,
                 createdatetime:data[i].createdatetime,
                 statusprint: data[i].statusprint,
+                statusprintinv:data[i].statusprintinv,
                 invstatus:taxInStatus,
+                totalprint:totalprint,
                 saleschannel: data[i].saleschannel,
                 item: items,
                 customer: cuss,
             };
             orders.push(order);
         }
-        
         return orders;
     } catch (error) {
-        console.log(error)
         return { status: 'dataNotFound' };
     }
-   
+  
   }
   
-  module.exports = AllOrderTab;
+  module.exports = ReceiptWaitTabPayment;
