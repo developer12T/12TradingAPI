@@ -11,7 +11,8 @@ async function receiptWaitTab(res) {
                 statusprint: '000',
                 status:{
                     [Op.not]:'Voided'
-                }
+                },
+                cono:1
                 // statusprintinv: {
                 //     [Op.not]: 'TaxInvoice'
                 // }

@@ -20,6 +20,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
 
           if(orderDatup == null){
           }else{
+            
             var countUpdateorder = 0
               for(let i=0;i<orderDatup.length;i++){
                 var numberser = await axios.post('http://192.168.2.97:8383/M3API/OrderManage/Order/getNumberSeries',{ 
@@ -53,23 +54,25 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
                await logTable.create({number:orderDatup[i].number,action:`run Inv : ${invnumber}`,action1:`run Co : ${lastnumber}`,createdAt:currentDate})
                countUpdateorder =  i
              } 
+
+             console.log(countUpdateorder)
+  
+             var numberser2 = await axios.post('http://192.168.2.97:8383/M3API/OrderManage/Order/getNumberSeries',{ 
+               series:'ง',
+               seriestype:'01', 
+               companycode:410,
+               seriesname:'071' 
+              },{});
+     
+             var updateNumber = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/updateNumberRunning',{ 
+                 series:'ง',
+                 seriestype:'01', 
+                 companycode:410,
+                 seriesname:'071',
+                 lastno:numberser2.data[0].lastno+countUpdateorder+1
+                }, {});
           }
-          console.log(countUpdateorder)
-  
-          var numberser2 = await axios.post('http://192.168.2.97:8383/M3API/OrderManage/Order/getNumberSeries',{ 
-            series:'ง',
-            seriestype:'01', 
-            companycode:410,
-            seriesname:'071' 
-           },{});
-  
-          var updateNumber = await axios.post(process.env.API_URL+'/M3API/OrderManage/Order/updateNumberRunning',{ 
-              series:'ง',
-              seriestype:'01', 
-              companycode:410,
-              seriesname:'071',
-              lastno:numberser2.data[0].lastno+countUpdateorder+1
-             }, {});
+       
 
 
              res.json('success')
