@@ -47,6 +47,12 @@ async function receiptSuccessTab(res) {
                 pricepernumber: item.pricepernumber,
                 totalprice: item.totalprice
             }));
+
+            if(data[i].totalprint == null){
+                var totalprint = 0
+            }else{
+                var totalprint =data[i].totalprint
+            }
     
             if(data[i].statusprintinv === 'TaxInvoice'){
                 var taxInStatus = 'ขอใบกำกับภาษี' 
@@ -108,17 +114,18 @@ async function receiptSuccessTab(res) {
                 statusprint: data[i].statusprint,
                 statusprintinv:data[i].statusprintinv,
                 invstatus:taxInStatus,
-                totalprint:totalprint,
+                 totalprint:totalprint,
                 saleschannel: data[i].saleschannel,
                 item: items,
                 customer: cuss,
                 isCOD:isCOD
-            };
+            }; 
             orders.push(order);
         }
     
     return orders ;
     } catch (error) {
+        console.log(error);
         return { status: 'dataNotFound' };
     }
 }
