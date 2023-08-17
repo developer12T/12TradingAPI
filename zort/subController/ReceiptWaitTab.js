@@ -62,6 +62,7 @@ async function receiptWaitTab(res) {
             }else{
                 var taxInStatus = '' 
             }
+            
             if(data[i].status === 'Success'){
                 var statusText = 'สำเร็จ'
             }else if(data[i].status === 'Voided'){
