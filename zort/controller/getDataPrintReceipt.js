@@ -18,7 +18,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
 
           const orderDatup = await Order.findAll({where:{cono:1,id:idOrder}})
 
-          if(orderDatup == null){
+          if((orderDatup === null) || (orderDatup === undefined) || (orderDatup === '')){
           }else{
             
             var countUpdateorder = 0
@@ -72,9 +72,6 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
                  lastno:numberser2.data[0].lastno+countUpdateorder+1
                 }, {});
           }
-       
-
-
              res.json('success')
         }else{
 
