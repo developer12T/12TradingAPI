@@ -11,7 +11,7 @@ const addOrderNew = require('../controller/subAddOrder/addOrder')
 const addCustomer = require('../controller/subAddOrder/addCustomer')
 const cusStock = require('../controller/subAddOrder/cutStock')
 const updateStatusOrder = require('../controller/subAddOrder/updateStatus')
-
+const updateOrderErp = require('../controller/updateErpVoided')
 
 
 const getDataPrintReceipt = require('../controller/getDataPrintReceipt')
@@ -26,6 +26,7 @@ OrderManage.use('/OrderManage',addOrderNew);
 OrderManage.use('/OrderManage',addCustomer);
 OrderManage.use('/OrderManage',cusStock);
 OrderManage.use('/OrderManage',updateStatusOrder);
+OrderManage.use('/OrderManage',updateOrderErp);
 
 
 OrderManage.use('/OrderManage',getDataPrintReceipt);
