@@ -21,9 +21,8 @@ updateOrderErp.put('/updateOrderErp', async (req, res) => {
         });
         try {
                     const data = await Order.findAll({where:{number:number,status:'Voided'}}) ;
-                    const data2 = await OrderHis.findAll({where:{number:number,status:'Voided'}}) ;
-
-                    if(data.length > 0 || data2.length > 0){
+            
+                    if(data.length > 0){
                     const query = `
                     UPDATE [dbo].[data_order] SET STATUS = '2' WHERE OAOREF = :value1 `;
                     
