@@ -10,6 +10,9 @@ app.use(express.json())
 //zort
 const zort = require('./zort/index')
 
+
+const PurchaseCustomerOrder = require('./poco/index')
+
 //M3API
 const M3API = require('./M3API/index')
 
@@ -17,12 +20,14 @@ const M3API = require('./M3API/index')
 const loginToken = require('./authen/login')
 const loginTokenAnt = require('./authen/loginAnt')
 const devLoginToken = require('./authen/devlogin')
+const checkToken = require('./authen/checkToken')
 
 //manageUser
 const manageUser = require('./manageuser/index')
 
 //zort
 app.use('/zort',auth,zort)
+app.use('/PurchaseCustomerOrder',auth,PurchaseCustomerOrder)
 
 // manageUser
 app.use('/manageUser',manageUser)
@@ -34,7 +39,8 @@ app.use('/M3API',M3API)
 app.use('/12Trading',loginToken)
 app.use('/12Trading',loginTokenAnt) 
 app.use('/12Trading',devLoginToken)
+app.use('/12Trading',auth,checkToken)
 
-require('./cronjob/main');
+// require('./cronjob/main');
 
 module.exports = app
