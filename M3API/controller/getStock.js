@@ -134,4 +134,4 @@ getStock.post('/getStockCount', async (req, res) => {
     res.json(error);
   }
 }),
-  (module.exports = getStock);
+module.exports = getStock;

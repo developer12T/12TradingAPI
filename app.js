@@ -16,6 +16,9 @@ const PurchaseCustomerOrder = require('./poco/index')
 //M3API
 const M3API = require('./M3API/index')
 
+//tohome
+const tohome = require('./tohome/index')
+
 //authen
 const loginToken = require('./authen/login')
 const loginTokenAnt = require('./authen/loginAnt')
@@ -35,6 +38,9 @@ app.use('/manageUser',manageUser)
 
 //M3API
 app.use('/M3API',M3API)
+
+//tohome
+app.use('/tohome',tohome)
 
 //authen
 app.use('/12Trading',loginToken)
