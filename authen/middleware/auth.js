@@ -56,7 +56,7 @@ const verifyToken = (req, res, next) => {
         }
 
         if (!token) {
-            return res.json('require token');
+            return res.status(400).json('require token');
         }
 
         try {
@@ -71,7 +71,7 @@ const verifyToken = (req, res, next) => {
 
             next();
         } catch (error) {
-            return res.json('Invalid token');
+            return res.status(500).json('Invalid token');
         }
     } else {
         if (req.body.cutoff == 'print') {

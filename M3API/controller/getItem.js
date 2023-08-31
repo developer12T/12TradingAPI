@@ -4,11 +4,20 @@ const { Item, ItemConvert } = require("../model/Item");
 const { Op } = require("sequelize");
 
 getItem.post("/getItem", async (req, res) => {
+  const itcode = req.body.itemcode
   try {
-    const data = await Item.findAll({
-      attributes: { exclude: ["id"] },
-    });
-    res.json(data);
+    if(itcode === null || itcode === '' || itcode === undefined){
+      const data = await Item.findAll({
+        attributes: { exclude: ["id"] },
+      });
+      res.json(data);
+    }else{
+      const data = await Item.findAll({
+        attributes: { exclude: ["id"] },
+        where:{itemcode:itcode}
+      });
+      res.json(data);
+    }
   } catch (error) {
     console.error(error);
     res.json(error);

@@ -78,6 +78,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
              res.json(orderDatup)
         }else{
 
+        
           const data = await Order.findAll({
             attributes: ['id','cono','invno', 'number', 'amount','totalproductamount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount','saleschannel','statusprintinv'],
             where: {
@@ -130,6 +131,21 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
   
            const response = await axios.post(process.env.API_URL+'/M3API/OrderManage/order/addOrderErp',{},{});
          }
+
+         for(const list of data[0].orderDetails){
+              console.log(list.sku.split('_')[0]);
+              var namem3 = await axios.post(process.env.API_URL+'/M3API/ItemManage/Item/getItem',{
+                itemcode:`${list.sku.split('_')[0]}`
+              })
+              console.log(namem3.data[0].itemname)
+
+              const matchingOrderDetail = data[0].orderDetails.find(detail => detail.sku.split('_')[0] === list.sku.split('_')[0]);
+              if (matchingOrderDetail) {
+                  matchingOrderDetail.name = namem3.data[0].itemname;
+              }
+              
+         }
+
          res.json(data)  
         }
         
