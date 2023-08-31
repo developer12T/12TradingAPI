@@ -118,14 +118,14 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
             }else if(totalprint[0].statusPrininvSuccess == '001'){
               var st = '002'
             }
-            await Order.update({statusPrininvSuccess:st,totalprint:ci},{where:{id:idOrder, status:{
-              [Op.not]:'Voided'
-          }}})
+          //   await Order.update({statusPrininvSuccess:st,totalprint:ci},{where:{id:idOrder, status:{
+          //     [Op.not]:'Voided'
+          // }}})
   
           }else{
-            await Order.update({statusprint:st,totalprint:ci},{where:{id:idOrder, status:{
-              [Op.not]:'Voided'
-          }}})
+          //   await Order.update({statusprint:st,totalprint:ci},{where:{id:idOrder, status:{
+          //     [Op.not]:'Voided'
+          // }}})
           }
          if(req.body.action == 'lastRowActionToDataErp'){
   

@@ -40,4 +40,17 @@ router.post('/loginAnt', async (req, res) => {
       }
 });
 
+
+router.post('/addAnt', async (req, res) => {
+  try {
+      const dataUser = await UserAnt.findAll({
+        attributes: { exclude: ['id'] },
+  });
+    
+      res.json(dataUser)
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Invalid req' });
+    }
+});
 module.exports = router;

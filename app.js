@@ -19,6 +19,7 @@ const M3API = require('./M3API/index')
 //authen
 const loginToken = require('./authen/login')
 const loginTokenAnt = require('./authen/loginAnt')
+const addAnt = require('./authen/addAnt')
 const devLoginToken = require('./authen/devlogin')
 const checkToken = require('./authen/checkToken')
 
@@ -38,9 +39,10 @@ app.use('/M3API',M3API)
 //authen
 app.use('/12Trading',loginToken)
 app.use('/12Trading',loginTokenAnt) 
+app.use('/12Trading',addAnt) 
 app.use('/12Trading',devLoginToken)
 app.use('/12Trading',auth,checkToken)
 
 // require('./cronjob/main');
-
+ 
 module.exports = app

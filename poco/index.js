@@ -3,10 +3,12 @@ const router = express.Router();
 
 const FileManage = require('./route/File');
 const ItemManage = require('./route/Item');
+const userManage = require('./route/user');
 
 
 router.use('/file', FileManage);
 router.use('/item', ItemManage);
+router.use('/user', userManage);
 
 
 module.exports = router

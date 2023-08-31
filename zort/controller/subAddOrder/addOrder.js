@@ -48,7 +48,7 @@ try {
    }); 
 
 
-   if(data.tag == null){
+   if(data.tag === null){
 
    }else{
     const query2 = `UPDATE [dbo].[order] SET [statusprintINV]  = 'TaxInvoice' WHERE id = `+data.id+``  ;

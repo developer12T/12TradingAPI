@@ -26,4 +26,19 @@ getDateLast.post('/getDateLast', async (req, res) => {
     }
 })
 
+getDateLast.put('/upDateLast', async (req, res) => {
+    try {
+       const item = await itemMaster.findAll() ;
+       for(const list of item){
+        await itemMaster.update({createdAt:currentDate},{where:{id:list.id}})
+       }
+        
+        res.json('200')
+       
+    } catch (error) {
+        console.log(error);
+        res.status(400).json(error)
+    }
+})
+
 module.exports = getDateLast;  

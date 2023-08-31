@@ -7,6 +7,7 @@ const getDashboard = require('../controller/getDashBoard')
 const getDateLast = require('../controller/getDateLast')
 const deletePreItem = require('../controller/deletePreItem')
 const getItem = require('../controller/getItem')
+const updateStatus = require('../controller/updateStatus')
 
 ItemManage.use('/ItemManage',addItemMaster);
 ItemManage.use('/ItemManage',getPreItem);
@@ -14,5 +15,6 @@ ItemManage.use('/ItemManage',getDashboard);
 ItemManage.use('/ItemManage',getDateLast);
 ItemManage.use('/ItemManage',deletePreItem);
 ItemManage.use('/ItemManage',getItem);
+ItemManage.use('/ItemManage',updateStatus);
 
 module.exports = ItemManage;
