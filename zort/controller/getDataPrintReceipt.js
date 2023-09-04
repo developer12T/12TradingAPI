@@ -8,7 +8,7 @@ const sequelize = require('sequelize')
 const axios = require('axios')
 const moment = require('moment');
 require('moment/locale/th');
-const currentDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm');
+const currentDate = moment().utcOffset(7).format('YYYY-MM-DD');
 getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
       
     try {
@@ -80,7 +80,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
 
         
           const data = await Order.findAll({
-            attributes: ['id','cono','invno', 'number', 'amount','totalproductamount', 'vatamount', 'shippingamount', 'orderdateString', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount','saleschannel','statusprintinv'],
+            attributes: ['id','cono','invno', 'number', 'amount','totalproductamount', 'vatamount', 'shippingamount', 'orderdateString','updatedatetime', 'discount', 'platformdiscount', 'sellerdiscount', 'shippingdiscount', 'discountamount', 'voucheramount','saleschannel','statusprintinv'],
             where: {
               id:idOrder
             },
@@ -118,14 +118,14 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
             }else if(totalprint[0].statusPrininvSuccess == '001'){
               var st = '002'
             }
-          //   await Order.update({statusPrininvSuccess:st,totalprint:ci},{where:{id:idOrder, status:{
-          //     [Op.not]:'Voided'
-          // }}})
+            await Order.update({statusPrininvSuccess:st,totalprint:ci,updatedatetime:currentDate},{where:{id:idOrder, status:{
+              [Op.not]:'Voided'
+          }}})
   
           }else{
-          //   await Order.update({statusprint:st,totalprint:ci},{where:{id:idOrder, status:{
-          //     [Op.not]:'Voided'
-          // }}})
+            await Order.update({statusprint:st,totalprint:ci,updatedatetime:currentDate},{where:{id:idOrder, status:{
+              [Op.not]:'Voided'
+          }}})
           }
          if(req.body.action == 'lastRowActionToDataErp'){
   

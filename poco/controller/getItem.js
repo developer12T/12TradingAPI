@@ -58,4 +58,17 @@ getItem.post('/getItem', async (req, res) => {
     }
 })
 
+getItem.post('/getItemAvailable', async (req, res) => {
+  try {
+      
+    var data = await itemMaster.findAll({where:{status:'1'}})
+    res.json(data)
+
+  } catch (error) {
+    console.log(error);
+    res.json('not found')
+  }
+
+})
+
 module.exports = getItem;  
