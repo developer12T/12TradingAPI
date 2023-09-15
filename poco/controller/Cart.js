@@ -40,7 +40,11 @@ addCart.post('/getCart', async (req, res) => {
     for(const list of data){
 
       const itemDetail = await itemMaster.findAll({where:{productId:list.idProduct}})
-      cartData.push(itemDetail[0])
+      const cartItem = {
+        ...itemDetail[0].toJSON(), // เพิ่มรายละเอียดของ itemDetail ลงใน cartItem
+        qty: list.qty // เพิ่ม list.qty เข้าไปใน cartItem
+      };
+      cartData.push(cartItem);
 
     }
     res.json(cartData)

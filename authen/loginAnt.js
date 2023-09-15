@@ -29,7 +29,7 @@ router.post('/loginAnt', async (req, res) => {
                 { username: dataUser.username },
                 process.env.TOKEN_KEY,
                 { expiresIn: '2h' })
-                res.json({ token, fullname: dataUser[0].Col_Name, department:dataUser[0].Col_o_JobTitle, departmentDescrip:dataUser[0].Col_DeptInfo } );
+                res.json({ token,idUser:dataUser[0].Col_ECard, fullname: dataUser[0].Col_Name, department:dataUser[0].Col_o_JobTitle, departmentDescrip:dataUser[0].Col_DeptInfo } );
           } else {
             res.status(401).json({ error: "Invalid username or password" });
           }

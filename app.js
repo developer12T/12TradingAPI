@@ -26,15 +26,16 @@ const addAnt = require('./authen/addAnt')
 const devLoginToken = require('./authen/devlogin')
 const checkToken = require('./authen/checkToken')
 
+
 //manageUser
-const manageUser = require('./manageuser/index')
+const manageonetwo = require('./manageonetwo/index')
 
 //zort
 app.use('/zort',auth,zort)
 app.use('/PurchaseCustomerOrder',auth,PurchaseCustomerOrder)
 
 // manageUser
-app.use('/manageUser',manageUser)
+app.use('/manageOneTwo',manageonetwo)
 
 //M3API
 app.use('/M3API',M3API)

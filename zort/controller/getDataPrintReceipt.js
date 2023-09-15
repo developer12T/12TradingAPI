@@ -151,7 +151,7 @@ getDataPrintReceipt.post('/getDataPrintReceipt', async (req, res) => {
         
 
         // 
-        
+         
 
            
     } catch (error) {

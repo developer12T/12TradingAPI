@@ -26,6 +26,10 @@ const UserAnt = sequelize.define('hs_User_test', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  Col_ECard:{
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 
 
 },{freezeTableName:true,timestamps:false,createdAt:false,updatedAt:false})
