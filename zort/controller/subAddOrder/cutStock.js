@@ -89,7 +89,7 @@ try {
               if(converType.sku.split('_')[1] === typecon.unit){
              
                log(pcsUnit)
-                 var stockTerm = (pcsUnit-listofdetail.number)/typecon.factor
+                 var stockTerm = math.floor((pcsUnit-listofdetail.number)/typecon.factor)
                  log(parseInt(stockTerm))
                 const updateStock = await Product.update({availablestock:stockTerm},{where:{sku:converType.sku}})
                 var stocks = [
